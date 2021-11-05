@@ -30,10 +30,6 @@ const Hero = (props) => {
       ) {
         console.log("On Scroll: " + filters);
         getTitles(nextPage, titleLimit, filters);
-      } else {
-        console.log(
-          `${document.body.clientHeight} : ${currentPosition} + ${window.innerHeight}`
-        );
       }
     }
 
