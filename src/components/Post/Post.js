@@ -12,7 +12,7 @@ const Post = (props) => {
     x++;
   });
 
-  console.log(tagList);
+  // console.log(tagList);
 
   let answered = "";
   let variant = "";

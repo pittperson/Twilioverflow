@@ -25,7 +25,7 @@ const Hero = (props) => {
       let currentPosition = window.scrollY;
 
       if (document.body.clientHeight === currentPosition + window.innerHeight) {
-        console.log("On Scroll: " + filters);
+        // console.log("On Scroll: " + filters);
         getTitles(nextPage, titleLimit, filters);
       }
     }
@@ -48,7 +48,7 @@ const Hero = (props) => {
         // console.log(items);
 
         items.forEach((item) => {
-          console.log(item.tags);
+          // console.log(item.tags);
           titles.push(
             <Post
               key={item.question_id}
@@ -62,7 +62,7 @@ const Hero = (props) => {
           );
         });
 
-        console.log(titles);
+        // console.log(titles);
 
         setTitleList([...titleList, ...titles]); // Brad
 
