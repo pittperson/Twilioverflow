@@ -24,9 +24,16 @@ const Hero = (props) => {
     function onScroll() {
       let currentPosition = window.scrollY;
 
-      if (document.body.clientHeight === currentPosition + window.innerHeight) {
-        // console.log("On Scroll: " + filters);
+      if (
+        document.body.clientHeight ===
+        currentPosition + window.innerHeight - 10
+      ) {
+        console.log("On Scroll: " + filters);
         getTitles(nextPage, titleLimit, filters);
+      } else {
+        console.log(
+          `${document.body.clientHeight} : ${currentPosition} + ${window.innerHeight}`
+        );
       }
     }
 
