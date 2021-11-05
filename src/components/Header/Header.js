@@ -18,7 +18,7 @@ const Header = () => {
           <span style={{ fontWeight: "bold" }}>
             <Navbar.Brand href="/">
               <img
-                src="logo512.png"
+                src="/logo512.png"
                 width="30"
                 height="30"
                 className="d-inline-block align-top"
