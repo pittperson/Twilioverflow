@@ -49,8 +49,8 @@ const Header = () => {
           <br />
           <div>
             An aggregation of everything Twilio via stack
-            <span style={{ fontWeight: "bold" }}>overflow</span>. Want to drill
-            deeper? Just click on a tag below the title.
+            <span style={{ fontWeight: "bold" }}>overflow</span>. Want to narrow
+            things down? Just click on a tag below the title.
           </div>
         </Modal.Body>
         <Modal.Footer>
