@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Header from "../Header/Header";
 import Hero from "../Hero/Hero";
 import Footer from "../Footer/Footer";
-import { Container, Row, Col, Button } from "react-bootstrap";
 
 const HomePage = (props) => {
+  const [searchFor, setSearchFor] = useState("");
+
+  const searchCallback = (childData) => {
+    setSearchFor(childData);
+  };
+
   let filter = "";
   if (props.match.params.filter !== undefined) {
     filter = props.match.params.filter;
@@ -13,8 +18,8 @@ const HomePage = (props) => {
 
   return (
     <div>
-      <Header />
-      <Hero filter={filter} />
+      <Header searchCallback={searchCallback} />
+      <Hero filter={filter} searchFor={searchFor} />
       <Footer />
     </div>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import "./Post.scss";
 import Tag from "../Tags/Tag";
@@ -7,12 +7,12 @@ const Post = (props) => {
   let x = 1;
   const tagList = [];
 
+  // console.log(props.tags);
+
   props.tags.forEach((tag) => {
     tagList.push(<Tag key={x} tag={tag} filters={props.filters} />);
     x++;
   });
-
-  // console.log(tagList);
 
   let answered = "";
   let variant = "";

@@ -5,10 +5,15 @@ const Tag = (props) => {
   const [tagHref, setTagHref] = useState("");
   const [match, setMatch] = useState("");
 
+  // console.log(props.tag);
+
   let variant = "";
-  let regEx = new RegExp(`${props.tag};`, "gi");
+
+  let propsTag = props.tag.replace(/[+]/g, "\\$&");
+  let regEx = new RegExp(`(${propsTag});`, "gi");
 
   const checkForTagMatch = () => {
+    // console.log(window.location.pathname);
     if (window.location.pathname.match(regEx)) {
       setTagHref(window.location.pathname.replace(regEx, ""));
       setMatch("yes");
