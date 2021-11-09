@@ -22,9 +22,7 @@ const Header = (props) => {
 
   // handle search submit
   const handleSearch = (event) => {
-    // event.preventDefault();
     cookies.set("search", searchString, { path: "/" });
-    // props.searchCallback(cookies);
     closeSearch();
   };
 

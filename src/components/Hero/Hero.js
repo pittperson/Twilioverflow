@@ -13,6 +13,7 @@ const Hero = (props) => {
   const [titleLimit, setTitleLimit] = useState(100);
   const [filters, setFilters] = useState("twilio;" + props?.filter ?? "");
   const [searchFor, setSearchFor] = useState(cookies.get("search"));
+  const [hasMore, setHasMore] = useState("false");
 
   useEffect(() => {
     getTitles(nextPage, titleLimit, filters);
@@ -40,7 +41,6 @@ const Hero = (props) => {
     let queryUrl = "";
 
     if (searchFor) {
-      console.log(`search query: ${searchFor}`);
       searchFor.replace(/[+#]/gi, "\\$&");
       queryUrl = `https://api.stackexchange.com/2.3/search?tagged=[${filters}]&intitle=${searchFor}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
     } else {
@@ -50,8 +50,11 @@ const Hero = (props) => {
     axios
       .get(queryUrl)
       .then((res) => {
+        let hasMore = "";
         const titles = [];
         const { items } = res.data;
+
+        hasMore = res.data.has_more;
 
         items.forEach((item) => {
           titles.push(
@@ -67,8 +70,11 @@ const Hero = (props) => {
           );
         });
 
-        setTitleList([...titleList, ...titles]); // Brad
-        setNextPage(pageNum + 1);
+        setTitleList([...titleList, ...titles]);
+
+        if (hasMore.toString() === "true") {
+          setNextPage(pageNum + 1);
+        }
       })
       .catch((e) => {
         console.log("error: ", e.message);
