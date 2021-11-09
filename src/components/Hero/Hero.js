@@ -15,7 +15,7 @@ const Hero = (props) => {
   const [searchFor, setSearchFor] = useState(cookies.get("search"));
 
   useEffect(() => {
-    // getTitles(nextPage, titleLimit, filters);
+    getTitles(nextPage, titleLimit, filters);
 
     return () => {};
   }, []);
@@ -28,7 +28,7 @@ const Hero = (props) => {
         document.body.clientHeight ===
         currentPosition + window.innerHeight - 10
       ) {
-        // getTitles(nextPage, titleLimit, filters);
+        getTitles(nextPage, titleLimit, filters);
       }
     }
 
@@ -36,149 +36,44 @@ const Hero = (props) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, [nextPage]);
 
-  // const getTitles = (pageNum, pageSize, nextPage) => {
-  //   axios
-  //     .get(
-  //       `https://api.stackexchange.com/2.3/questions?tagged=[${filters}]&page=${pageNum}&pagesize=${pageSize}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`
-  //     )
-  //     .then((res) => {
-  //       const titles = [];
-  //       const { items } = res.data;
+  const getTitles = (pageNum, pageSize, nextPage) => {
+    let queryUrl = "";
 
-  //       let searchFor = cookies.get("search");
-  //       searchFor
-  //         ? console.log("Res Cookie: '" + searchFor + "'")
-  //         : (searchFor = "");
-
-  //       searchFor.replace(/[+#]/g, "\\$&");
-
-  //       if (searchFor) {
-  //         items.forEach((item) => {
-  //           if (item.title.match(searchFor)) {
-  //             titles.push(
-  //               <Post
-  //                 key={item.question_id}
-  //                 title={item.title}
-  //                 tags={item.tags}
-  //                 date={item.creation_date}
-  //                 link={item.link}
-  //                 answered={item.is_answered}
-  //                 filters={filters}
-  //               />
-  //             );
-  //           }
-  //         });
-  //         console.log(titles.length);
-  //       } else {
-  //         items.forEach((item) => {
-  //           titles.push(
-  //             <Post
-  //               key={item.question_id}
-  //               title={item.title}
-  //               tags={item.tags}
-  //               date={item.creation_date}
-  //               link={item.link}
-  //               answered={item.is_answered}
-  //               filters={filters}
-  //             />
-  //           );
-  //         });
-  //       }
-
-  //       setTitleList([...titleList, ...titles]); // Brad
-  //       setNextPage(pageNum + 1);
-  //     })
-  //     .catch((e) => {
-  //       console.log("error: ", e.message);
-  //     });
-  // };
-
-  // ------------------
-
-  // const getTitles = async (pageNum, pageSize, nextPage) => {
-  //   axios
-  //     .get(
-  //       `https://api.stackexchange.com/2.3/questions?tagged=[${filters}]&page=${pageNum}&pagesize=${pageSize}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`
-  //     )
-  //     .then((res) => {
-  //       const titles = [];
-  //       const { items } = res.data;
-
-  //       // let searchFor = cookies.get("search");
-  //       // searchFor
-  //       //   ? console.log("Res Cookie: '" + searchFor + "'")
-  //       //   : (searchFor = "");
-
-  //       searchFor.replace(/[+#]/g, "\\$&");
-
-  //       if (searchFor) {
-  //         console.log("RegEx");
-  //         items.forEach((item) => {
-  //           if (item.title.match(searchFor)) {
-  //             titles.push(
-  //               <Post
-  //                 key={item.question_id}
-  //                 title={item.title}
-  //                 tags={item.tags}
-  //                 date={item.creation_date}
-  //                 link={item.link}
-  //                 answered={item.is_answered}
-  //                 filters={filters}
-  //               />
-  //             );
-  //           }
-  //         });
-  //         console.log(titles.length);
-  //       } else {
-  //         console.log("No RegEx");
-  //         items.forEach((item) => {
-  //           titles.push(
-  //             <Post
-  //               key={item.question_id}
-  //               title={item.title}
-  //               tags={item.tags}
-  //               date={item.creation_date}
-  //               link={item.link}
-  //               answered={item.is_answered}
-  //               filters={filters}
-  //             />
-  //           );
-  //         });
-  //       }
-
-  //       setTitleList([...titleList, ...titles]); // Brad
-  //       setNextPage(pageNum + 1);
-  //     })
-  //     .catch((e) => {
-  //       // console.log("error: ", e.message);
-  //     });
-
-  //   return titleList;
-  // };
-
-  const poo = async (page, articles) => {
-    let newArr = [];
-
-    for (let p = 1; p <= page; p++) {
-      for (let a = 1; a <= articles; a++) {
-        let page = p;
-        let article = a;
-        newArr.push(`Page: ${page}, Article: ${article}`);
-      }
+    if (searchFor) {
+      console.log(`search query: ${searchFor}`);
+      searchFor.replace(/[+#]/gi, "\\$&");
+      queryUrl = `https://api.stackexchange.com/2.3/search?tagged=[${filters}]&intitle=${searchFor}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
+    } else {
+      queryUrl = `https://api.stackexchange.com/2.3/questions?tagged=[${filters}]&page=${pageNum}&pagesize=${pageSize}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
     }
 
-    return newArr;
+    axios
+      .get(queryUrl)
+      .then((res) => {
+        const titles = [];
+        const { items } = res.data;
+
+        items.forEach((item) => {
+          titles.push(
+            <Post
+              key={item.question_id}
+              title={item.title}
+              tags={item.tags}
+              date={item.creation_date}
+              link={item.link}
+              answered={item.is_answered}
+              filters={filters}
+            />
+          );
+        });
+
+        setTitleList([...titleList, ...titles]); // Brad
+        setNextPage(pageNum + 1);
+      })
+      .catch((e) => {
+        console.log("error: ", e.message);
+      });
   };
-
-  const collectAllSearchResults = async () => {
-    // for (let page = 1; page <= 10; page++) {
-    let result = await poo(10, 100);
-
-    console.log(result);
-    // }
-  };
-
-  collectAllSearchResults();
 
   return (
     <>
