@@ -7,13 +7,6 @@ import Footer from "../Footer/Footer";
 const HomePage = (props) => {
   const cookies = new Cookies();
 
-  // const [searchCookie, setSearchCookie] = useState("");
-
-  // const searchCallback = (childData) => {
-  //   setSearchCookie(childData);
-  //   console.log(childData);
-  // };
-
   let filter = "";
   if (props.match.params.filter !== undefined) {
     filter = props.match.params.filter;

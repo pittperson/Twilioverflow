@@ -16,34 +16,44 @@ const Post = (props) => {
 
   let answered = "";
   let variant = "";
+  let bgColor = "";
   if (props.answered) {
     answered = "yes";
     variant = "success";
+    bgColor = "#dc3645";
   } else {
     answered = "no";
     variant = "danger";
+    bgColor = "#198754";
   }
 
   return (
     <>
       <Container className="titleBox">
         <Row>
-          <Col>
-            <a href={props.link} target="_blank" rel="noreferrer">
-              {props.title}
-            </a>
+          <Col xs={11}>
+            <Row className="p-0">
+              <Col>
+                <a href={props.link} target="_blank" rel="noreferrer">
+                  {props.title}
+                </a>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <div className="pt-1 pb-1">{tagList}</div>
+              </Col>
+            </Row>
           </Col>
-        </Row>
-        <Row>
-          <Col xs="10">
-            <div className="pt-1 pb-1">{tagList}</div>
-          </Col>
-          <Col>
-            <div className="d-grid gap-2 pt-1 pb-1">
-              <Button className="mt-1 float-end" size="sm" variant={variant}>
-                answered: {answered}
-              </Button>
-            </div>
+          <Col xs={1} className="p-0 text-end">
+            <div
+              style={{
+                backgroundColor: bgColor,
+                width: "15px",
+                height: "100%",
+                float: "right",
+              }}
+            ></div>
           </Col>
         </Row>
       </Container>

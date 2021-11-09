@@ -32,6 +32,11 @@ const Header = (props) => {
     window.location.reload();
   };
 
+  let clearSearchLink = "";
+  if (cookies.get("search")) {
+    clearSearchLink = <Nav.Link onClick={clearSearch}>Clear Search</Nav.Link>;
+  }
+
   return (
     <>
       <Navbar variant="dark" bg="danger" sticky="top">
@@ -55,6 +60,7 @@ const Header = (props) => {
 
             <Nav.Link onClick={openSearch}>Search</Nav.Link>
           </Nav>
+          <Nav className="text-end ms-auto">{clearSearchLink}</Nav>
         </Container>
       </Navbar>
 
