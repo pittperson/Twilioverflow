@@ -49,20 +49,29 @@ const Hero = (props) => {
 
         let searchFor = cookies.get("search");
         searchFor
-          ? console.log("Res Cookie: " + searchFor)
-          : console.log("NO Cookie! " + searchFor);
+          ? console.log("Res Cookie: '" + searchFor + "'")
+          : (searchFor = "");
 
         searchFor.replace(/[+#]/g, "\\$&");
-        // let regEx = new RegExp(`(?:^|\W)(${searchFor})(?:$|\W)`, "gi");
-        let regEx = new RegExp(`/AMD/`, "gi");
-        // let re = `/(?:^|\W)${searchFor}(?:$|\W)/ig`;
-        let re = `/AMD/gi`;
 
-        console.log(searchFor.match(regEx));
-
-        items.forEach((item) => {
-          if (searchFor && item.title.match(re)) {
-            // console.log("cookie" + item.title);
+        if (searchFor) {
+          items.forEach((item) => {
+            if (item.title.match(searchFor)) {
+              titles.push(
+                <Post
+                  key={item.question_id}
+                  title={item.title}
+                  tags={item.tags}
+                  date={item.creation_date}
+                  link={item.link}
+                  answered={item.is_answered}
+                  filters={filters}
+                />
+              );
+            }
+          });
+        } else {
+          items.forEach((item) => {
             titles.push(
               <Post
                 key={item.question_id}
@@ -74,28 +83,15 @@ const Hero = (props) => {
                 filters={filters}
               />
             );
-          } else {
-            console.log("no cookie");
-            titles.push(
-              <Post
-                key={item.question_id}
-                title={item.title}
-                tags={item.tags}
-                date={item.creation_date}
-                link={item.link}
-                answered={item.is_answered}
-                filters={filters}
-              />
-            );
-          }
-        });
+          });
+        }
 
         setTitleList([...titleList, ...titles]); // Brad
 
         setNextPage(pageNum + 1);
       })
       .catch((e) => {
-        console.log("error: ", e.message);
+        // console.log("error: ", e.message);
       });
   };
 
