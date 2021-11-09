@@ -13,7 +13,7 @@ const Hero = (props) => {
 
   const [titleList, setTitleList] = useState([]);
   const [nextPage, setNextPage] = useState(1);
-  const [titleLimit, setTitleLimit] = useState(50);
+  const [titleLimit, setTitleLimit] = useState(100);
   const [filters, setFilters] = useState("twilio;" + props?.filter ?? "");
 
   useEffect(() => {
@@ -70,6 +70,7 @@ const Hero = (props) => {
               );
             }
           });
+          console.log(titles.length);
         } else {
           items.forEach((item) => {
             titles.push(
@@ -87,11 +88,10 @@ const Hero = (props) => {
         }
 
         setTitleList([...titleList, ...titles]); // Brad
-
         setNextPage(pageNum + 1);
       })
       .catch((e) => {
-        // console.log("error: ", e.message);
+        console.log("error: ", e.message);
       });
   };
 
