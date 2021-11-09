@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { useHistory, Redirect, Link } from "react-router-dom";
+import Cookies from "universal-cookie";
 import { Container, Nav, Modal, Button } from "react-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
-import { Envelope } from "react-bootstrap-icons";
 import "./Header.scss";
 
 const Header = (props) => {
+  const cookies = new Cookies();
+
   // modal constants
   const [about, setAbout] = useState(false);
   const [search, setSearch] = useState(false);
@@ -21,9 +22,16 @@ const Header = (props) => {
 
   // handle search submit
   const handleSearch = (event) => {
-    event.preventDefault();
-    props.searchCallback(searchString);
+    // event.preventDefault();
+    cookies.set("search", searchString, { path: "/" });
+    // props.searchCallback(cookies);
     closeSearch();
+  };
+
+  const clearSearch = (event) => {
+    cookies.remove("search", { path: "/" });
+    closeSearch();
+    window.location.reload();
   };
 
   return (
@@ -90,12 +98,15 @@ const Header = (props) => {
                   value={searchString}
                   onChange={(e) => setSearchString(e.target.value)}
                 />
-              </label>
+              </label>{" "}
               <input type="submit" value="Search" onClick={handleSearch} />
             </form>
           </div>
         </Modal.Body>
         <Modal.Footer>
+          <Button variant="secondary" onClick={clearSearch}>
+            Clear Search
+          </Button>
           <Button variant="secondary" onClick={closeSearch}>
             Close
           </Button>

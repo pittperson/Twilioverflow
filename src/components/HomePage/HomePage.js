@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-
+import Cookies from "universal-cookie";
 import Header from "../Header/Header";
 import Hero from "../Hero/Hero";
 import Footer from "../Footer/Footer";
 
 const HomePage = (props) => {
-  const [searchFor, setSearchFor] = useState("");
+  const cookies = new Cookies();
 
-  const searchCallback = (childData) => {
-    setSearchFor(childData);
-  };
+  // const [searchCookie, setSearchCookie] = useState("");
+
+  // const searchCallback = (childData) => {
+  //   setSearchCookie(childData);
+  //   console.log(childData);
+  // };
 
   let filter = "";
   if (props.match.params.filter !== undefined) {
@@ -18,8 +21,8 @@ const HomePage = (props) => {
 
   return (
     <div>
-      <Header searchCallback={searchCallback} />
-      <Hero filter={filter} searchFor={searchFor} />
+      <Header />
+      <Hero filter={filter} />
       <Footer />
     </div>
   );

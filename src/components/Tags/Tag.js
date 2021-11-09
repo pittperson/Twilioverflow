@@ -9,7 +9,7 @@ const Tag = (props) => {
 
   let variant = "";
 
-  let propsTag = props.tag.replace(/[+]/g, "\\$&");
+  let propsTag = props.tag.replace(/[+#]/g, "\\$&");
   let regEx = new RegExp(`(${propsTag});`, "gi");
 
   const checkForTagMatch = () => {
