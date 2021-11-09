@@ -54,7 +54,15 @@ const Header = (props) => {
 
   return (
     <>
-      <Navbar variant="dark" bg="danger" sticky="top">
+      {/* <Navbar variant="dark" bg="danger" sticky="top"> */}
+
+      <Navbar
+        collapseOnSelect
+        expand="sm"
+        variant="dark"
+        bg="danger"
+        sticky="top"
+      >
         <Container>
           <Navbar.Brand href="/">
             <img
@@ -66,18 +74,23 @@ const Header = (props) => {
             />{" "}
             Twilioverflow
           </Navbar.Brand>
-          <Nav className="me-auto">
-            <Nav.Link onClick={openAbout}>About</Nav.Link>
 
-            <Nav.Link href="mailto:twilioverflow@twilioverflow.com">
-              Contact
-            </Nav.Link>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsove-navbar-nav">
+            <Nav className="text-end me-auto">
+              <Nav.Link onClick={openAbout}>About</Nav.Link>
 
-            <Nav.Link onClick={openSearch}>Search</Nav.Link>
-          </Nav>
-          <Nav className="text-end ms-auto">{clearSearchLink}</Nav>
+              <Nav.Link href="mailto:twilioverflow@twilioverflow.com">
+                Contact
+              </Nav.Link>
+
+              <Nav.Link onClick={openSearch}>Search</Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
         </Container>
       </Navbar>
+
+      {/* </Navbar> */}
 
       <Modal show={about} onHide={closeAbout}>
         <Modal.Header closeButton>
@@ -97,11 +110,6 @@ const Header = (props) => {
             things down? Just click on a tag below the title.
           </div>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={closeAbout}>
-            Close
-          </Button>
-        </Modal.Footer>
       </Modal>
 
       <Modal show={search} onHide={closeSearch}>

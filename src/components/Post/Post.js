@@ -31,7 +31,7 @@ const Post = (props) => {
     <>
       <Container className="titleBox">
         <Row>
-          <Col xs={11}>
+          <Col xs={10}>
             <Row className="p-0">
               <Col>
                 <a href={props.link} target="_blank" rel="noreferrer">
@@ -45,7 +45,7 @@ const Post = (props) => {
               </Col>
             </Row>
           </Col>
-          <Col xs={1} className="p-0 text-end">
+          <Col xs={2} className="p-0 text-end">
             {caution}
             <div
               style={{

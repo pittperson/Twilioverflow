@@ -1,7 +1,7 @@
 import Post from "../Post/Post";
 import React, { useState, useEffect } from "react";
 import Cookies from "universal-cookie";
-import Container from "react-bootstrap/Container";
+import { Container, Row, Col, Badge } from "react-bootstrap";
 
 const axios = require("axios");
 
@@ -47,6 +47,33 @@ const Hero = (props) => {
         return "";
     }
   };
+
+  const clearSearch = (event) => {
+    cookies.remove("search", { path: "/" });
+    cookies.remove("answered", { path: "/" });
+    window.location.reload();
+  };
+
+  let clearSearchLink = "";
+  if (cookies.get("search")) {
+    clearSearchLink = (
+      <Row>
+        <Col className="text-end">
+          <h5>
+            <Badge
+              bg="light"
+              text="dark"
+              className="mb-3"
+              style={{ cursor: "pointer" }}
+              onClick={clearSearch}
+            >
+              Clear Search
+            </Badge>
+          </h5>
+        </Col>
+      </Row>
+    );
+  }
 
   const getTitles = (pageNum, pageSize, nextPage) => {
     let queryUrl = "";
@@ -95,8 +122,11 @@ const Hero = (props) => {
 
   return (
     <>
-      <br></br>
-      <Container fluid>{titleList}</Container>
+      <br />
+      <Container>
+        {clearSearchLink}
+        {titleList}
+      </Container>
     </>
   );
 };
