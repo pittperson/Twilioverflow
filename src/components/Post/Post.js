@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import "./Post.scss";
 import Tag from "../Tags/Tag";
+import Emoji from "../Emoji/Emoji";
 
 const Post = (props) => {
   let x = 1;
@@ -14,17 +15,16 @@ const Post = (props) => {
     x++;
   });
 
-  let answered = "";
-  let variant = "";
   let bgColor = "";
-  if (props.answered) {
-    answered = "yes";
-    variant = "success";
-    bgColor = "#dc3645";
-  } else {
-    answered = "no";
-    variant = "danger";
+  if (props.answered.toString() === "true") {
     bgColor = "#198754";
+  } else {
+    bgColor = "#dc3645";
+  }
+
+  let caution = "";
+  if (props.answered && !props.acceptedAnswer) {
+    caution = <Emoji symbol="☑️" label="unaccepted" />;
   }
 
   return (
@@ -46,6 +46,7 @@ const Post = (props) => {
             </Row>
           </Col>
           <Col xs={1} className="p-0 text-end">
+            {caution}
             <div
               style={{
                 backgroundColor: bgColor,

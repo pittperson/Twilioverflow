@@ -13,7 +13,7 @@ const Hero = (props) => {
   const [titleLimit, setTitleLimit] = useState(100);
   const [filters, setFilters] = useState("twilio;" + props?.filter ?? "");
   const [searchFor, setSearchFor] = useState(cookies.get("search"));
-  const [hasMore, setHasMore] = useState("false");
+  const [answerState, setAnswerState] = useState(cookies.get("answered"));
 
   useEffect(() => {
     getTitles(nextPage, titleLimit, filters);
@@ -37,12 +37,29 @@ const Hero = (props) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, [nextPage]);
 
+  const switchCase = () => {
+    switch (answerState) {
+      case "true":
+        return "&accepted=True";
+      case "false":
+        return "&accepted=False";
+      default:
+        return "";
+    }
+  };
+
   const getTitles = (pageNum, pageSize, nextPage) => {
     let queryUrl = "";
+    let queryTack = "";
+    console.log(searchFor);
 
     if (searchFor) {
+      queryTack = switchCase(answerState);
+      console.log(queryTack);
+
       searchFor.replace(/[+#]/gi, "\\$&");
-      queryUrl = `https://api.stackexchange.com/2.3/search?tagged=[${filters}]&intitle=${searchFor}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
+      queryUrl = `https://api.stackexchange.com/2.3/search/advanced?tagged=[${filters}]&page=${pageNum}&pagesize=${pageSize}&title=${searchFor}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((${queryTack}`;
+      console.log(queryUrl);
     } else {
       queryUrl = `https://api.stackexchange.com/2.3/questions?tagged=[${filters}]&page=${pageNum}&pagesize=${pageSize}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
     }
@@ -50,11 +67,8 @@ const Hero = (props) => {
     axios
       .get(queryUrl)
       .then((res) => {
-        let hasMore = "";
         const titles = [];
         const { items } = res.data;
-
-        hasMore = res.data.has_more;
 
         items.forEach((item) => {
           titles.push(
@@ -65,16 +79,14 @@ const Hero = (props) => {
               date={item.creation_date}
               link={item.link}
               answered={item.is_answered}
+              acceptedAnswer={item.accepted_answer_id}
               filters={filters}
             />
           );
         });
 
         setTitleList([...titleList, ...titles]);
-
-        if (hasMore.toString() === "true") {
-          setNextPage(pageNum + 1);
-        }
+        setNextPage(pageNum + 1);
       })
       .catch((e) => {
         console.log("error: ", e.message);

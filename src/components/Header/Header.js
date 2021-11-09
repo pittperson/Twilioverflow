@@ -1,6 +1,16 @@
 import React, { useState } from "react";
 import Cookies from "universal-cookie";
-import { Container, Nav, Modal, Button } from "react-bootstrap";
+import {
+  Container,
+  Nav,
+  Modal,
+  Button,
+  InputGroup,
+  FormControl,
+  Dropdown,
+  DropdownButton,
+} from "react-bootstrap";
+import Emoji from "../Emoji/Emoji";
 import Navbar from "react-bootstrap/Navbar";
 import "./Header.scss";
 
@@ -23,11 +33,14 @@ const Header = (props) => {
   // handle search submit
   const handleSearch = (event) => {
     cookies.set("search", searchString, { path: "/" });
+    cookies.set("answered", event, { path: "/" });
     closeSearch();
+    window.location.reload();
   };
 
   const clearSearch = (event) => {
     cookies.remove("search", { path: "/" });
+    cookies.remove("answered", { path: "/" });
     closeSearch();
     window.location.reload();
   };
@@ -36,6 +49,8 @@ const Header = (props) => {
   if (cookies.get("search")) {
     clearSearchLink = <Nav.Link onClick={clearSearch}>Clear Search</Nav.Link>;
   }
+
+  let caution = <Emoji symbol="☑️" label="unaccepted" />;
 
   return (
     <>
@@ -94,27 +109,28 @@ const Header = (props) => {
           <Modal.Title>Search Twilioverflow</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div>
-            <form>
-              <label>
-                <input
-                  type="text"
-                  value={searchString}
-                  onChange={(e) => setSearchString(e.target.value)}
-                />
-              </label>{" "}
-              <input type="submit" value="Search" onClick={handleSearch} />
-            </form>
-          </div>
+          <InputGroup className="mb-3">
+            <FormControl
+              aria-label="Search For"
+              placeholder="Search For..."
+              onChange={(e) => setSearchString(e.target.value)}
+            />
+
+            <DropdownButton
+              variant="outline-secondary"
+              title="Search"
+              id="input-group-dropdown-2"
+              align="end"
+              onSelect={handleSearch}
+            >
+              <Dropdown.Item eventKey="">All</Dropdown.Item>
+              <Dropdown.Item eventKey="true">Answered</Dropdown.Item>
+              <Dropdown.Item eventKey="false">Unanswered</Dropdown.Item>
+            </DropdownButton>
+          </InputGroup>
+          {caution}{" "}
+          <span style={{ fontSize: "10pt" }}>= Unaccepted Answer</span>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={clearSearch}>
-            Clear Search
-          </Button>
-          <Button variant="secondary" onClick={closeSearch}>
-            Close
-          </Button>
-        </Modal.Footer>
       </Modal>
     </>
   );
