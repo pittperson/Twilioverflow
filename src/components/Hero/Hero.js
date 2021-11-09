@@ -1,24 +1,25 @@
 import Post from "../Post/Post";
 import React, { useState, useEffect } from "react";
-import Container from "react-bootstrap/Container";
-import { decode } from "html-entities";
+import Cookies from "universal-cookie";
+import { Container, Row, Col, Badge } from "react-bootstrap";
 
 const axios = require("axios");
 
 const Hero = (props) => {
+  const cookies = new Cookies();
+
   const [titleList, setTitleList] = useState([]);
   const [nextPage, setNextPage] = useState(1);
-  const [titleLimit, setTitleLimit] = useState(50);
+  const [titleLimit, setTitleLimit] = useState(100);
   const [filters, setFilters] = useState("twilio;" + props?.filter ?? "");
+  const [searchFor, setSearchFor] = useState(cookies.get("search"));
+  const [answerState, setAnswerState] = useState(cookies.get("answered"));
 
   useEffect(() => {
-    console.log("Initial Load: " + filters);
-
     getTitles(nextPage, titleLimit, filters);
-    return () => {
-      console.log("Initial Load Done");
-    };
-  }, [titleLimit]);
+
+    return () => {};
+  }, []);
 
   useEffect(() => {
     function onScroll() {
@@ -28,7 +29,6 @@ const Hero = (props) => {
         document.body.clientHeight ===
         currentPosition + window.innerHeight - 10
       ) {
-        console.log("On Scroll: " + filters);
         getTitles(nextPage, titleLimit, filters);
       }
     }
@@ -37,21 +37,67 @@ const Hero = (props) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, [nextPage]);
 
-  const getTitles = (pageNum, pageSize) => {
-    axios
-      .get(
-        `https://api.stackexchange.com/2.3/questions?tagged=[${filters}]&page=${pageNum}&pagesize=${pageSize}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`
-      )
-      .then((res) => {
-        // console.log(res);
+  const switchCase = () => {
+    switch (answerState) {
+      case "true":
+        return "&accepted=True";
+      case "false":
+        return "&accepted=False";
+      default:
+        return "";
+    }
+  };
 
+  const clearSearch = (event) => {
+    cookies.remove("search", { path: "/" });
+    cookies.remove("answered", { path: "/" });
+    window.location.reload();
+  };
+
+  let clearSearchLink = "";
+  if (cookies.get("search")) {
+    clearSearchLink = (
+      <Row>
+        <Col className="text-end">
+          <h5>
+            <Badge
+              bg="light"
+              text="dark"
+              className="mb-3"
+              style={{ cursor: "pointer" }}
+              onClick={clearSearch}
+            >
+              Clear Search
+            </Badge>
+          </h5>
+        </Col>
+      </Row>
+    );
+  }
+
+  const getTitles = (pageNum, pageSize, nextPage) => {
+    let queryUrl = "";
+    let queryTack = "";
+    console.log(searchFor);
+
+    if (searchFor) {
+      queryTack = switchCase(answerState);
+      console.log(queryTack);
+
+      searchFor.replace(/[+#]/gi, "\\$&");
+      queryUrl = `https://api.stackexchange.com/2.3/search/advanced?tagged=[${filters}]&page=${pageNum}&pagesize=${pageSize}&title=${searchFor}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((${queryTack}`;
+      console.log(queryUrl);
+    } else {
+      queryUrl = `https://api.stackexchange.com/2.3/questions?tagged=[${filters}]&page=${pageNum}&pagesize=${pageSize}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
+    }
+
+    axios
+      .get(queryUrl)
+      .then((res) => {
         const titles = [];
         const { items } = res.data;
 
-        // console.log(items);
-
         items.forEach((item) => {
-          // console.log(item.tags);
           titles.push(
             <Post
               key={item.question_id}
@@ -60,26 +106,27 @@ const Hero = (props) => {
               date={item.creation_date}
               link={item.link}
               answered={item.is_answered}
+              acceptedAnswer={item.accepted_answer_id}
               filters={filters}
             />
           );
         });
 
-        // console.log(titles);
-
-        setTitleList([...titleList, ...titles]); // Brad
-
+        setTitleList([...titleList, ...titles]);
         setNextPage(pageNum + 1);
       })
       .catch((e) => {
-        // console.log("error: ", e.message);
+        console.log("error: ", e.message);
       });
   };
 
   return (
     <>
-      <br></br>
-      <Container fluid>{titleList}</Container>
+      <br />
+      <Container>
+        {clearSearchLink}
+        {titleList}
+      </Container>
     </>
   );
 };

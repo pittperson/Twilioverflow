@@ -1,11 +1,12 @@
-import React from "react";
-
+import React, { useState } from "react";
+import Cookies from "universal-cookie";
 import Header from "../Header/Header";
 import Hero from "../Hero/Hero";
 import Footer from "../Footer/Footer";
-import { Container, Row, Col, Button } from "react-bootstrap";
 
 const HomePage = (props) => {
+  const cookies = new Cookies();
+
   let filter = "";
   if (props.match.params.filter !== undefined) {
     filter = props.match.params.filter;

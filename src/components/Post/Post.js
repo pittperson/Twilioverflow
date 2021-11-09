@@ -1,49 +1,60 @@
-import React from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import React, { useState } from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import "./Post.scss";
 import Tag from "../Tags/Tag";
+import Emoji from "../Emoji/Emoji";
 
 const Post = (props) => {
   let x = 1;
   const tagList = [];
+
+  // console.log(props.tags);
 
   props.tags.forEach((tag) => {
     tagList.push(<Tag key={x} tag={tag} filters={props.filters} />);
     x++;
   });
 
-  // console.log(tagList);
-
-  let answered = "";
-  let variant = "";
-  if (props.answered) {
-    answered = "yes";
-    variant = "success";
+  let bgColor = "";
+  if (props.answered.toString() === "true") {
+    bgColor = "#198754";
   } else {
-    answered = "no";
-    variant = "danger";
+    bgColor = "#dc3645";
+  }
+
+  let caution = "";
+  if (props.answered && !props.acceptedAnswer) {
+    caution = <Emoji symbol="☑️" label="unaccepted" />;
   }
 
   return (
     <>
       <Container className="titleBox">
         <Row>
-          <Col>
-            <a href={props.link} target="_blank" rel="noreferrer">
-              {props.title}
-            </a>
+          <Col xs={10}>
+            <Row className="p-0">
+              <Col>
+                <a href={props.link} target="_blank" rel="noreferrer">
+                  {props.title}
+                </a>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <div className="pt-1 pb-1">{tagList}</div>
+              </Col>
+            </Row>
           </Col>
-        </Row>
-        <Row>
-          <Col xs="10">
-            <div className="pt-1 pb-1">{tagList}</div>
-          </Col>
-          <Col>
-            <div className="d-grid gap-2 pt-1 pb-1">
-              <Button className="mt-1 float-end" size="sm" variant={variant}>
-                answered: {answered}
-              </Button>
-            </div>
+          <Col xs={2} className="p-0 text-end">
+            {caution}
+            <div
+              style={{
+                backgroundColor: bgColor,
+                width: "15px",
+                height: "100%",
+                float: "right",
+              }}
+            ></div>
           </Col>
         </Row>
       </Container>
