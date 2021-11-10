@@ -17,14 +17,13 @@ const Post = (props) => {
 
   let bgColor = "";
   if (props.answered.toString() === "true") {
-    bgColor = "#198754";
+    if (props.acceptedAnswer) {
+      bgColor = "#198754";
+    } else {
+      bgColor = "#ffc106";
+    }
   } else {
     bgColor = "#dc3645";
-  }
-
-  let caution = "";
-  if (props.answered && !props.acceptedAnswer) {
-    caution = <Emoji symbol="☑️" label="unaccepted" />;
   }
 
   return (
@@ -46,15 +45,18 @@ const Post = (props) => {
             </Row>
           </Col>
           <Col xs={2} className="p-0 text-end">
-            {caution}
             <div
               style={{
                 backgroundColor: bgColor,
-                width: "15px",
+                width: "20px",
                 height: "100%",
                 float: "right",
+                textAlign: "center",
+                color: "#fff",
               }}
-            ></div>
+            >
+              {" "}
+            </div>
           </Col>
         </Row>
       </Container>

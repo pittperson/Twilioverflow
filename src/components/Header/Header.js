@@ -50,7 +50,7 @@ const Header = (props) => {
     clearSearchLink = <Nav.Link onClick={clearSearch}>Clear Search</Nav.Link>;
   }
 
-  let caution = <Emoji symbol="☑️" label="unaccepted" />;
+  let accepted = <Emoji symbol="☑️" label="accepted" />;
 
   return (
     <>
@@ -136,8 +136,6 @@ const Header = (props) => {
               <Dropdown.Item eventKey="false">Unanswered</Dropdown.Item>
             </DropdownButton>
           </InputGroup>
-          {caution}{" "}
-          <span style={{ fontSize: "10pt" }}>= Unaccepted Answer</span>
         </Modal.Body>
       </Modal>
     </>
