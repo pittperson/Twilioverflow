@@ -59,7 +59,7 @@ const Hero = (props) => {
     clearSearchLink = (
       <Row>
         <Col className="text-end">
-          <h5>
+          <h6>
             <Badge
               bg="light"
               text="dark"
@@ -69,7 +69,7 @@ const Hero = (props) => {
             >
               Clear Search
             </Badge>
-          </h5>
+          </h6>
         </Col>
       </Row>
     );
@@ -124,6 +124,15 @@ const Hero = (props) => {
     <>
       <br />
       <Container>
+        <Row>
+          <Col>
+            <h6>
+              <Badge className="mb-3 bg-success">Accepted Answer</Badge>{" "}
+              <Badge className="mb-3 bg-warning">Unaccepted Answer</Badge>{" "}
+              <Badge className="mb-3 bg-danger">No Answer</Badge>{" "}
+            </h6>
+          </Col>
+        </Row>
         {clearSearchLink}
         {titleList}
       </Container>
