@@ -5,6 +5,10 @@ const Tag = (props) => {
   const [tagHref, setTagHref] = useState("");
   const [match, setMatch] = useState("");
 
+  useEffect(() => {
+    checkForTagMatch();
+  }, [match]);
+
   // console.log(props.tag);
 
   let variant = "";
@@ -22,10 +26,6 @@ const Tag = (props) => {
       setMatch("no");
     }
   };
-
-  useEffect(() => {
-    checkForTagMatch();
-  }, [match]);
 
   props.filters.match(regEx)
     ? (variant = "outline-danger")

@@ -1,5 +1,6 @@
 import Post from "../Post/Post";
 import React, { useState, useEffect } from "react";
+import { useHistory, Redirect } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { Container, Row, Col, Badge } from "react-bootstrap";
 
@@ -14,6 +15,8 @@ const Hero = (props) => {
   const [filters, setFilters] = useState("twilio;" + props?.filter ?? "");
   const [searchFor, setSearchFor] = useState(cookies.get("search"));
   const [answerState, setAnswerState] = useState(cookies.get("answered"));
+
+  let history = useHistory();
 
   useEffect(() => {
     getTitles(nextPage, titleLimit, filters);
@@ -51,7 +54,7 @@ const Hero = (props) => {
   const clearSearch = (event) => {
     cookies.remove("search", { path: "/" });
     cookies.remove("answered", { path: "/" });
-    window.location.reload();
+    window.location.href = "/";
   };
 
   let clearSearchLink = "";
@@ -78,7 +81,6 @@ const Hero = (props) => {
   const getTitles = (pageNum, pageSize, nextPage) => {
     let queryUrl = "";
     let queryTack = "";
-    console.log(searchFor);
 
     if (searchFor) {
       queryTack = switchCase(answerState);
@@ -133,6 +135,10 @@ const Hero = (props) => {
             </h6>
           </Col>
         </Row>
+        <Row>
+          <Col></Col>
+        </Row>
+
         {clearSearchLink}
         {titleList}
       </Container>

@@ -1,21 +1,23 @@
-import React, { useState } from "react";
+import SearchTag from "../Tags/SearchTags";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Cookies from "universal-cookie";
 import {
   Container,
   Nav,
   Modal,
-  Button,
   InputGroup,
   FormControl,
   Dropdown,
   DropdownButton,
 } from "react-bootstrap";
-import Emoji from "../Emoji/Emoji";
 import Navbar from "react-bootstrap/Navbar";
+// import Tag from "../Tags/Tag";
 import "./Header.scss";
 
 const Header = (props) => {
   const cookies = new Cookies();
+  const twilioTags = props.twilioTags;
 
   // modal constants
   const [about, setAbout] = useState(false);
@@ -23,6 +25,11 @@ const Header = (props) => {
 
   // search constant
   const [searchString, setSearchString] = useState("");
+
+  let searchTagList = [];
+  twilioTags.forEach((tag) => {
+    searchTagList.push(<SearchTag key={tag} tagName={tag} />);
+  });
 
   // handle modals
   const closeAbout = () => setAbout(false);
@@ -38,24 +45,8 @@ const Header = (props) => {
     window.location.reload();
   };
 
-  const clearSearch = (event) => {
-    cookies.remove("search", { path: "/" });
-    cookies.remove("answered", { path: "/" });
-    closeSearch();
-    window.location.reload();
-  };
-
-  let clearSearchLink = "";
-  if (cookies.get("search")) {
-    clearSearchLink = <Nav.Link onClick={clearSearch}>Clear Search</Nav.Link>;
-  }
-
-  let accepted = <Emoji symbol="☑️" label="accepted" />;
-
   return (
     <>
-      {/* <Navbar variant="dark" bg="danger" sticky="top"> */}
-
       <Navbar
         collapseOnSelect
         expand="sm"
@@ -89,8 +80,6 @@ const Header = (props) => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-
-      {/* </Navbar> */}
 
       <Modal show={about} onHide={closeAbout}>
         <Modal.Header closeButton>
@@ -137,6 +126,7 @@ const Header = (props) => {
             </DropdownButton>
           </InputGroup>
         </Modal.Body>
+        <Modal.Body>{searchTagList}</Modal.Body>
       </Modal>
     </>
   );

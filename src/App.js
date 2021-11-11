@@ -1,11 +1,10 @@
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, useHistory } from "react-router-dom";
 import "./App.scss";
 import HomePage from "./components/HomePage/HomePage";
 import React from "react";
 
 const App = () => {
   return (
-    // <div className="App">
     <main>
       <BrowserRouter>
         <Switch>
@@ -14,7 +13,6 @@ const App = () => {
         </Switch>
       </BrowserRouter>
     </main>
-    // </div>
   );
 };
 
