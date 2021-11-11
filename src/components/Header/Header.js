@@ -10,6 +10,7 @@ import {
   FormControl,
   Dropdown,
   DropdownButton,
+  ToggleButton,
 } from "react-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
 // import Tag from "../Tags/Tag";
@@ -25,11 +26,23 @@ const Header = (props) => {
 
   // search constant
   const [searchString, setSearchString] = useState("");
+  const [checkedState, setCheckedState] = useState(
+    new Array(twilioTags.length).fill(false)
+  );
 
-  let searchTagList = [];
-  twilioTags.forEach((tag) => {
-    searchTagList.push(<SearchTag key={tag} tagName={tag} />);
-  });
+  console.log(twilioTags);
+  const handleOnChange = (position) => {
+    const updatedCheckedState = checkedState.map((item, index) =>
+      index === position ? !item : item
+    );
+
+    setCheckedState(updatedCheckedState);
+  };
+  console.log(checkedState);
+  // let searchTagList = [];
+  // twilioTags.forEach((tag) => {
+  //   searchTagList.push(<SearchTag key={tag} tagName={tag} />);
+  // });
 
   // handle modals
   const closeAbout = () => setAbout(false);
@@ -126,7 +139,26 @@ const Header = (props) => {
             </DropdownButton>
           </InputGroup>
         </Modal.Body>
-        <Modal.Body>{searchTagList}</Modal.Body>
+        {/* <Modal.Body>{searchTagList}</Modal.Body> */}
+        <Modal.Body>
+          {twilioTags.map((tag, index) => {
+            return (
+              <ToggleButton
+                className="mx-1 my-1"
+                id={`tag-${index}`}
+                key={`${tag}-${index}`}
+                type="checkbox"
+                variant="outline-secondary"
+                checked={checkedState[index]}
+                value={tag}
+                onChange={() => handleOnChange(index)}
+                size="sm"
+              >
+                {tag}
+              </ToggleButton>
+            );
+          })}
+        </Modal.Body>
       </Modal>
     </>
   );
