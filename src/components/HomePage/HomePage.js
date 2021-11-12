@@ -13,29 +13,31 @@ const HomePage = (props) => {
   }
 
   useEffect(() => {
-    collectTwilioTags("twilio");
-  }, []);
+    const collectTwilioTags = async (tagName) => {
+      let queryUrl = "";
 
-  const collectTwilioTags = async (tagName) => {
-    let queryUrl = "";
+      queryUrl = `https://api.stackexchange.com/2.3/tags?order=desc&sort=popular&inname=${tagName}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
+      await axios
+        .get(queryUrl)
+        .then((res) => {
+          let titles = [];
+          const { items } = res.data;
 
-    queryUrl = `https://api.stackexchange.com/2.3/tags?order=desc&sort=popular&inname=${tagName}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
-    await axios
-      .get(queryUrl)
-      .then((res) => {
-        let titles = [];
-        const { items } = res.data;
+          items.forEach((item) => {
+            titles.push(item.name);
+          });
 
-        items.forEach((item) => {
-          titles.push(item.name);
+          setTwilioTags([...titles]);
+        })
+        .catch((e) => {
+          console.log("error: ", e.message);
         });
+    };
 
-        setTwilioTags([...titles]);
-      })
-      .catch((e) => {
-        console.log("error: ", e.message);
-      });
-  };
+    collectTwilioTags("twilio");
+
+    console.log(twilioTags);
+  }, []);
 
   // console.log(twilioTags);
 

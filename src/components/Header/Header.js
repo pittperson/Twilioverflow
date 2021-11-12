@@ -10,11 +10,12 @@ import {
   FormControl,
   Dropdown,
   DropdownButton,
-  ToggleButton,
+  Button,
 } from "react-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
 // import Tag from "../Tags/Tag";
 import "./Header.scss";
+import { ColumnsGap } from "react-bootstrap-icons";
 
 const Header = (props) => {
   const cookies = new Cookies();
@@ -25,22 +26,66 @@ const Header = (props) => {
   const [search, setSearch] = useState(false);
 
   // search constant
+  const twilioTagCount = twilioTags.length;
   const [searchString, setSearchString] = useState("");
-  const [checkedState, setCheckedState] = useState([]);
+  const [searchTags, setSearchTags] = useState(new Array(twilioTagCount));
+  const [variant, setVariant] = useState([]);
 
-  console.log(twilioTags);
-  const handleOnChange = (position) => {
-    const updatedCheckedState = checkedState.map((item, index) =>
-      index === position ? !item : item
-    );
+  console.log(searchTags.length);
 
-    setCheckedState(updatedCheckedState);
+  // useEffect(() => {
+  //   setSearchTags(searchTags.fill(""));
+  //   console.log(searchTags);
+  //   console.log("searchTags ^^^^^");
+  //   // setSearchTags([...twilioTags]);
+  // }, []);
+
+  const tagArray = [];
+  tagArray.length = twilioTags.length;
+  tagArray.fill("");
+
+  const trueFalse = [];
+  trueFalse.length = twilioTags.length;
+  trueFalse.fill("outline-secondary");
+
+  const handleOnChange = (tag, position) => {
+    // if (tagArray[index] !== "") {
+    //   tagArray[index] = "";
+    //   trueFalse[index] = "outline-secondary";
+    // } else {
+    //   tagArray.splice(index, 1, tag);
+    //   trueFalse.splice(index, 1, "outline-danger");
+    // }
+    // console.log(tagArray);
+    // console.log(trueFalse);
+    // console.log(searchTags);
+
+    //   searchTags.find((value, index) => {
+    //     if (value === tag) {
+    //       console.log(`Index: ${index} : ${value}`);
+    //     } else {
+    //       console.log("object");
+    //       const newTags = [...searchTags];
+    //       newTags[index] = tag;
+    //       setSearchTags(newTags);
+    //     }
+    //   });
+    // };
+
+    searchTags.find((value, index) => {
+      if (value === tag) {
+        console.log("match");
+        console.log(`Index: ${index} : ${value}`);
+      } else {
+        console.log("No Match");
+        // const newTags = [...searchTags];
+        // newTags[position] = tag;
+        // setSearchTags(newTags);
+      }
+
+      // console.log(`Index: ${index}, Position: ${position}`);
+    });
   };
-  console.log(checkedState);
-  // let searchTagList = [];
-  // twilioTags.forEach((tag) => {
-  //   searchTagList.push(<SearchTag key={tag} tagName={tag} />);
-  // });
 
   // handle modals
   const closeAbout = () => setAbout(false);
@@ -141,19 +186,16 @@ const Header = (props) => {
         <Modal.Body>
           {twilioTags.map((tag, index) => {
             return (
-              <ToggleButton
+              <Button
                 className="mx-1 my-1"
-                id={`tag-${index}`}
-                key={`${tag}-${index}`}
-                type="checkbox"
+                key={`${tag}`}
                 variant="outline-secondary"
-                checked={checkedState[index]}
-                value={tag}
-                onChange={() => handleOnChange(index)}
+                value={`${tag} - ${index}`}
+                onClick={() => handleOnChange(tag, index)}
                 size="sm"
               >
                 {tag}
-              </ToggleButton>
+              </Button>
             );
           })}
         </Modal.Body>
