@@ -26,9 +26,7 @@ const Header = (props) => {
 
   // search constant
   const [searchString, setSearchString] = useState("");
-  const [checkedState, setCheckedState] = useState(
-    new Array(twilioTags.length).fill(false)
-  );
+  const [checkedState, setCheckedState] = useState([]);
 
   console.log(twilioTags);
   const handleOnChange = (position) => {
