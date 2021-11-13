@@ -35,11 +35,7 @@ const HomePage = (props) => {
     };
 
     collectTwilioTags("twilio");
-
-    console.log(twilioTags);
   }, []);
-
-  // console.log(twilioTags);
 
   return (
     <div>

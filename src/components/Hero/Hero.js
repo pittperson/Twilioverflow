@@ -14,6 +14,7 @@ const Hero = (props) => {
   const [titleLimit, setTitleLimit] = useState(100);
   const [filters, setFilters] = useState("twilio;" + props?.filter ?? "");
   const [searchFor, setSearchFor] = useState(cookies.get("search"));
+  const [queryList, setQueryList] = useState(cookies.get("queryList"));
   const [answerState, setAnswerState] = useState(cookies.get("answered"));
 
   let history = useHistory();
@@ -54,11 +55,13 @@ const Hero = (props) => {
   const clearSearch = (event) => {
     cookies.remove("search", { path: "/" });
     cookies.remove("answered", { path: "/" });
+    cookies.remove("queryList", { path: "/" });
+
     window.location.href = "/";
   };
 
   let clearSearchLink = "";
-  if (cookies.get("search")) {
+  if (cookies.get("search") || cookies.get("queryList")) {
     clearSearchLink = (
       <Row>
         <Col className="text-end">
@@ -89,6 +92,9 @@ const Hero = (props) => {
       searchFor.replace(/[+#]/gi, "\\$&");
       queryUrl = `https://api.stackexchange.com/2.3/search/advanced?tagged=[${filters}]&page=${pageNum}&pagesize=${pageSize}&title=${searchFor}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((${queryTack}`;
       console.log(queryUrl);
+    } else if (queryList) {
+      console.log(queryList);
+      queryUrl = `https://api.stackexchange.com/2.3/questions?tagged=[${queryList}]&page=${pageNum}&pagesize=${pageSize}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
     } else {
       queryUrl = `https://api.stackexchange.com/2.3/questions?tagged=[${filters}]&page=${pageNum}&pagesize=${pageSize}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
     }
@@ -96,6 +102,7 @@ const Hero = (props) => {
     axios
       .get(queryUrl)
       .then((res) => {
+        console.log(queryUrl);
         const titles = [];
         const { items } = res.data;
 

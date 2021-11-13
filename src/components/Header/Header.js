@@ -1,4 +1,3 @@
-import SearchTag from "../Tags/SearchTags";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "universal-cookie";
@@ -13,9 +12,7 @@ import {
   Button,
 } from "react-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
-// import Tag from "../Tags/Tag";
 import "./Header.scss";
-import { ColumnsGap } from "react-bootstrap-icons";
 
 const Header = (props) => {
   const cookies = new Cookies();
@@ -25,67 +22,26 @@ const Header = (props) => {
   const [about, setAbout] = useState(false);
   const [search, setSearch] = useState(false);
 
-  // search constant
-  const twilioTagCount = twilioTags.length;
+  // search constants
   const [searchString, setSearchString] = useState("");
-  const [searchTags, setSearchTags] = useState(new Array(twilioTagCount));
-  const [variant, setVariant] = useState([]);
-
-  console.log(searchTags.length);
-
-  // useEffect(() => {
-  //   setSearchTags(searchTags.fill(""));
-  //   console.log(searchTags);
-  //   console.log("searchTags ^^^^^");
-  //   // setSearchTags([...twilioTags]);
-  // }, []);
-
-  const tagArray = [];
-  tagArray.length = twilioTags.length;
-  tagArray.fill("");
-
-  const trueFalse = [];
-  trueFalse.length = twilioTags.length;
-  trueFalse.fill("outline-secondary");
+  const [searchTags, setSearchTags] = useState([]);
+  const [nextPage, setNextPage] = useState(1);
+  const [titleLimit, setTitleLimit] = useState(100);
 
   const handleOnChange = (tag, position) => {
-    // if (tagArray[index] !== "") {
-    //   tagArray[index] = "";
-    //   trueFalse[index] = "outline-secondary";
-    // } else {
-    //   tagArray.splice(index, 1, tag);
-    //   trueFalse.splice(index, 1, "outline-danger");
-    // }
-    // console.log(tagArray);
-    // console.log(trueFalse);
-    // console.log(searchTags);
+    const indexOfTag = searchTags.indexOf(tag);
 
-    //   searchTags.find((value, index) => {
-    //     if (value === tag) {
-    //       console.log(`Index: ${index} : ${value}`);
-    //     } else {
-    //       console.log("object");
-    //       const newTags = [...searchTags];
-    //       newTags[index] = tag;
-    //       setSearchTags(newTags);
-    //     }
-    //   });
-    // };
+    if (indexOfTag > -1) {
+      let tempTags = searchTags.filter((t) => t !== tag);
 
-    searchTags.find((value, index) => {
-      if (value === tag) {
-        console.log("match");
-        console.log(`Index: ${index} : ${value}`);
-      } else {
-        console.log("No Match");
-        // const newTags = [...searchTags];
-        // newTags[position] = tag;
-        // setSearchTags(newTags);
-      }
-
-      // console.log(`Index: ${index}, Position: ${position}`);
-    });
+      setSearchTags([...tempTags]);
+    } else {
+      setSearchTags([...searchTags, tag]);
+    }
   };
+
+  // console.log(twilioTags);
+  console.log(searchTags);
 
   // handle modals
   const closeAbout = () => setAbout(false);
@@ -93,12 +49,23 @@ const Header = (props) => {
   const closeSearch = () => setSearch(false);
   const openSearch = () => setSearch(true);
 
-  // handle search submit
+  // handle text search submit
   const handleSearch = (event) => {
     cookies.set("search", searchString, { path: "/" });
     cookies.set("answered", event, { path: "/" });
     closeSearch();
     window.location.reload();
+  };
+
+  const handleSearchByTags = async (searchTags) => {
+    let queryList = "";
+    searchTags.forEach((tag) => {
+      queryList += `${tag};`;
+    });
+
+    cookies.set("queryList", queryList, { path: "/" });
+    closeSearch();
+    window.location.assign(`/${queryList}`);
   };
 
   return (
@@ -189,7 +156,11 @@ const Header = (props) => {
               <Button
                 className="mx-1 my-1"
                 key={`${tag}`}
-                variant="outline-secondary"
+                variant={
+                  searchTags.includes(tag)
+                    ? "outline-danger"
+                    : "outline-secondary"
+                }
                 value={`${tag} - ${index}`}
                 onClick={() => handleOnChange(tag, index)}
                 size="sm"
@@ -198,6 +169,17 @@ const Header = (props) => {
               </Button>
             );
           })}
+
+          <div className="d-grid gap-2">
+            <Button
+              className="mx-1 my-1"
+              variant="outline-primary"
+              size="sm"
+              onClick={() => handleSearchByTags(searchTags)}
+            >
+              Search By Tags
+            </Button>
+          </div>
         </Modal.Body>
       </Modal>
     </>
