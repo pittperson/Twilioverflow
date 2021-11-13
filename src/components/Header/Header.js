@@ -1,28 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Cookies from "universal-cookie";
 import {
   Container,
   Nav,
   Modal,
-  Button,
   InputGroup,
   FormControl,
   Dropdown,
   DropdownButton,
+  Button,
 } from "react-bootstrap";
-import Emoji from "../Emoji/Emoji";
 import Navbar from "react-bootstrap/Navbar";
 import "./Header.scss";
 
 const Header = (props) => {
   const cookies = new Cookies();
+  const twilioTags = props.twilioTags;
 
   // modal constants
   const [about, setAbout] = useState(false);
   const [search, setSearch] = useState(false);
 
-  // search constant
+  // search constants
   const [searchString, setSearchString] = useState("");
+  const [searchTags, setSearchTags] = useState([]);
+  const [nextPage, setNextPage] = useState(1);
+  const [titleLimit, setTitleLimit] = useState(100);
+
+  const handleOnChange = (tag, position) => {
+    const indexOfTag = searchTags.indexOf(tag);
+
+    if (indexOfTag > -1) {
+      let tempTags = searchTags.filter((t) => t !== tag);
+
+      setSearchTags([...tempTags]);
+    } else {
+      setSearchTags([...searchTags, tag]);
+    }
+  };
+
+  // console.log(twilioTags);
+  console.log(searchTags);
 
   // handle modals
   const closeAbout = () => setAbout(false);
@@ -30,7 +49,7 @@ const Header = (props) => {
   const closeSearch = () => setSearch(false);
   const openSearch = () => setSearch(true);
 
-  // handle search submit
+  // handle text search submit
   const handleSearch = (event) => {
     cookies.set("search", searchString, { path: "/" });
     cookies.set("answered", event, { path: "/" });
@@ -38,24 +57,19 @@ const Header = (props) => {
     window.location.reload();
   };
 
-  const clearSearch = (event) => {
-    cookies.remove("search", { path: "/" });
-    cookies.remove("answered", { path: "/" });
+  const handleSearchByTags = async (searchTags) => {
+    let queryList = "";
+    searchTags.forEach((tag) => {
+      queryList += `${tag};`;
+    });
+
+    cookies.set("queryList", queryList, { path: "/" });
     closeSearch();
-    window.location.reload();
+    window.location.assign(`/${queryList}`);
   };
-
-  let clearSearchLink = "";
-  if (cookies.get("search")) {
-    clearSearchLink = <Nav.Link onClick={clearSearch}>Clear Search</Nav.Link>;
-  }
-
-  let accepted = <Emoji symbol="☑️" label="accepted" />;
 
   return (
     <>
-      {/* <Navbar variant="dark" bg="danger" sticky="top"> */}
-
       <Navbar
         collapseOnSelect
         expand="sm"
@@ -89,8 +103,6 @@ const Header = (props) => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-
-      {/* </Navbar> */}
 
       <Modal show={about} onHide={closeAbout}>
         <Modal.Header closeButton>
@@ -136,6 +148,38 @@ const Header = (props) => {
               <Dropdown.Item eventKey="false">Unanswered</Dropdown.Item>
             </DropdownButton>
           </InputGroup>
+        </Modal.Body>
+        {/* <Modal.Body>{searchTagList}</Modal.Body> */}
+        <Modal.Body>
+          {twilioTags.map((tag, index) => {
+            return (
+              <Button
+                className="mx-1 my-1"
+                key={`${tag}`}
+                variant={
+                  searchTags.includes(tag)
+                    ? "outline-danger"
+                    : "outline-secondary"
+                }
+                value={`${tag} - ${index}`}
+                onClick={() => handleOnChange(tag, index)}
+                size="sm"
+              >
+                {tag}
+              </Button>
+            );
+          })}
+
+          <div className="d-grid gap-2">
+            <Button
+              className="mx-1 my-1"
+              variant="outline-primary"
+              size="sm"
+              onClick={() => handleSearchByTags(searchTags)}
+            >
+              Search By Tags
+            </Button>
+          </div>
         </Modal.Body>
       </Modal>
     </>
