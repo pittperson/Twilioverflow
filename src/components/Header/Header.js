@@ -131,8 +131,8 @@ const Header = (props) => {
         <Modal.Body>
           <InputGroup className="mb-3">
             <FormControl
-              aria-label="Search For"
-              placeholder="Search For..."
+              aria-label="Search Titles For"
+              placeholder="Search Titles For..."
               onChange={(e) => setSearchString(e.target.value)}
             />
 

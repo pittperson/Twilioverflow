@@ -47,13 +47,9 @@ const Hero = (props) => {
     let tempDrillTags = [];
     if (window.location.pathname.length > 1) {
       tempDrillTags.push(
-        <Badge
-          key="drills"
-          className="me-1 my-1 bg-light text-dark"
-          variant="white"
-        >
+        <span key="drills" style={{ fontWeight: "bold", fontSize: "10pt" }}>
           Drill Tags:{" "}
-        </Badge>
+        </span>
       );
 
       window.location.pathname
@@ -102,15 +98,14 @@ const Hero = (props) => {
     clearSearchLink = (
       <Col xs={4} className="text-end">
         <h6>
-          <Badge
-            bg="light"
-            text="dark"
-            className="mb-3"
-            style={{ cursor: "pointer" }}
+          <span
+            key="drills"
+            style={{ fontWeight: "bold", fontSize: "10pt", cursor: "pointer" }}
             onClick={clearSearch}
           >
+            {" "}
             Clear Search
-          </Badge>
+          </span>
         </h6>
       </Col>
     );
