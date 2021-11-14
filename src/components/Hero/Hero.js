@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory, Redirect } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { Container, Row, Col, Badge } from "react-bootstrap";
+import "./hero.css";
 
 const axios = require("axios");
 
@@ -16,13 +17,13 @@ const Hero = (props) => {
   const [searchFor, setSearchFor] = useState(cookies.get("search"));
   const [queryList, setQueryList] = useState(cookies.get("queryList"));
   const [answerState, setAnswerState] = useState(cookies.get("answered"));
+  const [drillTags, setDrillTags] = useState([]);
 
   let history = useHistory();
 
   useEffect(() => {
     getTitles(nextPage, titleLimit, filters);
-
-    return () => {};
+    getDrillTags();
   }, []);
 
   useEffect(() => {
@@ -34,12 +35,44 @@ const Hero = (props) => {
         currentPosition + window.innerHeight - 10
       ) {
         getTitles(nextPage, titleLimit, filters);
+        getDrillTags();
       }
     }
 
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, [nextPage]);
+
+  const getDrillTags = () => {
+    let tempDrillTags = [];
+    if (window.location.pathname.length > 1) {
+      tempDrillTags.push(
+        <Badge
+          key="drills"
+          className="me-1 my-1 bg-light text-dark"
+          variant="white"
+        >
+          Drill Tags:{" "}
+        </Badge>
+      );
+
+      window.location.pathname
+        .substring(1, window.location.pathname.length - 1)
+        .split(";")
+        .forEach((tag) => {
+          console.log(tag);
+          tempDrillTags.push(
+            <Badge key={tag} className="me-1 my-1 bg-secondary">
+              {tag}
+            </Badge>
+          );
+        });
+    }
+
+    setDrillTags([...tempDrillTags]);
+  };
+
+  console.log(drillTags);
 
   const switchCase = () => {
     switch (answerState) {
@@ -61,23 +94,25 @@ const Hero = (props) => {
   };
 
   let clearSearchLink = "";
-  if (cookies.get("search") || cookies.get("queryList")) {
+  if (
+    cookies.get("search") ||
+    cookies.get("queryList") ||
+    drillTags.length > 0
+  ) {
     clearSearchLink = (
-      <Row>
-        <Col className="text-end">
-          <h6>
-            <Badge
-              bg="light"
-              text="dark"
-              className="mb-3"
-              style={{ cursor: "pointer" }}
-              onClick={clearSearch}
-            >
-              Clear Search
-            </Badge>
-          </h6>
-        </Col>
-      </Row>
+      <Col xs={4} className="text-end">
+        <h6>
+          <Badge
+            bg="light"
+            text="dark"
+            className="mb-3"
+            style={{ cursor: "pointer" }}
+            onClick={clearSearch}
+          >
+            Clear Search
+          </Badge>
+        </h6>
+      </Col>
     );
   }
 
@@ -145,8 +180,10 @@ const Hero = (props) => {
         <Row>
           <Col></Col>
         </Row>
-
-        {clearSearchLink}
+        <Row>
+          <Col xs={8}>{drillTags}</Col>
+          {clearSearchLink}
+        </Row>
         {titleList}
       </Container>
     </>
