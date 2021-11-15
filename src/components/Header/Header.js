@@ -11,12 +11,27 @@ import {
   DropdownButton,
   Button,
 } from "react-bootstrap";
+import { getTwilioTags } from "../../helpers/getTwilioTags";
+
 import Navbar from "react-bootstrap/Navbar";
 import "./Header.scss";
 
 const Header = (props) => {
   const cookies = new Cookies();
-  const twilioTags = props.twilioTags;
+  const [twilioTags, setTwilioTags] = useState([]);
+
+  useEffect(() => {
+    // grab all tags with "twilio" in the name
+    let tempTwilioTags = [];
+    getTwilioTags("twilio").then((res) => {
+      const { items } = res.data;
+      items.forEach((item) => {
+        tempTwilioTags.push(item.name);
+      });
+
+      setTwilioTags(tempTwilioTags);
+    });
+  }, []);
 
   // modal constants
   const [about, setAbout] = useState(false);
@@ -25,8 +40,6 @@ const Header = (props) => {
   // search constants
   const [searchString, setSearchString] = useState("");
   const [searchTags, setSearchTags] = useState([]);
-  const [nextPage, setNextPage] = useState(1);
-  const [titleLimit, setTitleLimit] = useState(100);
 
   const handleOnChange = (tag, position) => {
     const indexOfTag = searchTags.indexOf(tag);
@@ -40,9 +53,6 @@ const Header = (props) => {
     }
   };
 
-  // console.log(twilioTags);
-  console.log(searchTags);
-
   // handle modals
   const closeAbout = () => setAbout(false);
   const openAbout = () => setAbout(true);
@@ -54,7 +64,7 @@ const Header = (props) => {
     cookies.set("search", searchString, { path: "/" });
     cookies.set("answered", event, { path: "/" });
     closeSearch();
-    window.location.reload();
+    window.location.replace("/");
   };
 
   const handleSearchByTags = async (searchTags) => {
@@ -97,6 +107,8 @@ const Header = (props) => {
               <Nav.Link href="mailto:twilioverflow@twilioverflow.com">
                 Contact
               </Nav.Link>
+
+              <Nav.Link href="/sankey">Sankey Chart</Nav.Link>
 
               <Nav.Link onClick={openSearch}>Search</Nav.Link>
             </Nav>
@@ -149,7 +161,6 @@ const Header = (props) => {
             </DropdownButton>
           </InputGroup>
         </Modal.Body>
-        {/* <Modal.Body>{searchTagList}</Modal.Body> */}
         <Modal.Body>
           {twilioTags.map((tag, index) => {
             return (

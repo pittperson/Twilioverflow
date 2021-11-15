@@ -1,47 +1,15 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Header from "../Header/Header";
+import React from "react";
 import Hero from "../Hero/Hero";
-import Footer from "../Footer/Footer";
 
 const HomePage = (props) => {
-  const [twilioTags, setTwilioTags] = useState([]);
-
   let filter = "";
   if (props.match.params.filter !== undefined) {
     filter = props.match.params.filter;
   }
 
-  useEffect(() => {
-    const collectTwilioTags = async (tagName) => {
-      let queryUrl = "";
-
-      queryUrl = `https://api.stackexchange.com/2.3/tags?order=desc&sort=popular&inname=${tagName}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
-      await axios
-        .get(queryUrl)
-        .then((res) => {
-          let titles = [];
-          const { items } = res.data;
-
-          items.forEach((item) => {
-            titles.push(item.name);
-          });
-
-          setTwilioTags([...titles]);
-        })
-        .catch((e) => {
-          console.log("error: ", e.message);
-        });
-    };
-
-    collectTwilioTags("twilio");
-  }, []);
-
   return (
     <div>
-      <Header twilioTags={twilioTags} />
       <Hero filter={filter} />
-      <Footer />
     </div>
   );
 };

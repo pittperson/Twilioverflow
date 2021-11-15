@@ -19,8 +19,6 @@ const Hero = (props) => {
   const [answerState, setAnswerState] = useState(cookies.get("answered"));
   const [drillTags, setDrillTags] = useState([]);
 
-  let history = useHistory();
-
   useEffect(() => {
     getTitles(nextPage, titleLimit, filters);
     getDrillTags();
@@ -68,7 +66,7 @@ const Hero = (props) => {
     setDrillTags([...tempDrillTags]);
   };
 
-  console.log(drillTags);
+  // console.log(drillTags);
 
   const switchCase = () => {
     switch (answerState) {
