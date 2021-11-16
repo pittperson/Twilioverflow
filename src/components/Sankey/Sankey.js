@@ -5,25 +5,51 @@ import { getTwilioTags } from "../../helpers/getTwilioTags";
 import Chart from "react-google-charts";
 
 const Sankey = (props) => {
-  const [tagRelationJson, setTagRelationJson] = useState([]);
-  useEffect(() => {
-    getRelatedTags("twilio").then((res) => {
-      let tempTagRelationJson = [];
-      tempTagRelationJson.push(["From", "To", "Weight"]);
-      res.data.items.map((item, index) => {
-        if (item.name !== "twilio") {
-          tempTagRelationJson.push(["Twilio", `${item.name}`, item.count]);
-        }
-      });
+  const [tagRelationJson, setTagRelationJson] = useState([
+    ["From", "To", "Weight"],
+  ]);
+  const [twilioTags, setTwilioTags] = useState([]);
 
-      setTagRelationJson(tempTagRelationJson);
+  useEffect(() => {
+    // console.log(tagRelationJson);
+
+    getTwilioTags("twilio").then((res1) => {
+      res1.data.items.forEach((item1) => {
+        getRelatedTags(item1.name).then((res2) => {
+          // console.log(`Item 1 Name: ${item1.name}`);
+          // console.log(res2.data.items);
+          let tempTagRelationJson = [...tagRelationJson];
+          res2.data.items.forEach((item2) => {
+            // console.log(`${item1.name}, ${item2.name}, ${item2.count}`);
+            tempTagRelationJson.push([item1.name, item2.name, item2.count]);
+          });
+
+          setTagRelationJson([...tagRelationJson, tempTagRelationJson]);
+        });
+      });
     });
   }, []);
+
+  console.log(tagRelationJson);
+
+  async function getTwilioTags(tagName) {
+    let queryUrl = "";
+
+    queryUrl = `https://api.stackexchange.com/2.3/tags?order=desc&sort=popular&inname=${tagName}&pagesize=100&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
+    return axios
+      .get(queryUrl)
+      .then((res) => {
+        return res;
+      })
+      .catch((e) => {
+        console.log("error: ", e.message);
+      });
+  }
 
   async function getRelatedTags(tagName) {
     let queryUrl = "";
 
-    queryUrl = `https://api.stackexchange.com/2.3/tags/${tagName}/related?pagesize=100&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
+    queryUrl = `https://api.stackexchange.com/2.3/tags/${tagName}/related?pagesize=20&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
     return axios
       .get(queryUrl)
       .then((res) => {
