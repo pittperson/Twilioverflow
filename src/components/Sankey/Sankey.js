@@ -14,19 +14,17 @@ import {
 const Sankey = () => {
   // const [twilioTags, setTwilioTags] = useState({});
   const [twilioTags, setTwilioTags] = useState([]);
-  const [str1, setStr1] = useState("");
-  const [str2, setStr2] = useState("");
+  const [keys, setKeys] = useState([]);
 
   useEffect(() => {
     getTwilioTags("twilio").then((res1) => {
-      // console.log(
-      //   res1.data.items.forEach((item1) => {
-      //     console.log(item1);
-      //   })
-      // );
+      let tempKeys = [];
       res1.data.items.forEach((item1) => {
+        if (tempKeys.indexOf(item1.name) < 0) {
+          tempKeys.push(item1.name);
+        }
+
         getRelatedTags(item1.name).then((res2) => {
-          // console.log(`>>>>>>>>Item 1 Name: ${item1.name}`);
           let tempTagRelationJson = [];
           res2.data.items.forEach((item2) => {
             if (item1.name !== item2.name) {
@@ -40,6 +38,7 @@ const Sankey = () => {
           setTwilioTags((prevState) => [...prevState, ...tempTagRelationJson]);
         });
       });
+      setKeys(tempKeys);
     });
   }, []);
 
@@ -64,11 +63,12 @@ const Sankey = () => {
   // ];
   // console.log(poop);
   console.log(twilioTags);
+  console.log(keys);
 
   async function getTwilioTags(tagName) {
     let queryUrl = "";
 
-    queryUrl = `https://api.stackexchange.com/2.3/tags?order=desc&sort=popular&inname=${tagName}&pagesize=2&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
+    queryUrl = `https://api.stackexchange.com/2.3/tags?order=desc&sort=popular&inname=${tagName}&pagesize=3&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
     return axios
       .get(queryUrl)
       .then((res) => {
@@ -109,15 +109,24 @@ const Sankey = () => {
                 text="Energy Consumption in 2004"
                 subtitle="(Millions of Tons, Oil Equivalent)"
               />
-              <CommonSeriesSettings
-                argumentField="country"
-                type="fullstackedbar"
-              />
-              <Series valueField="hydro" name="Hydro-electric" />
+              <CommonSeriesSettings argumentField="key" type="fullstackedbar" />
+
+              {keys.map((key, index) => {
+                twilioTags.map((tKey, tIndex) => {
+                  // console.log(tKey.key);
+                  if (key === tKey.key) {
+                    // console.log(`${key} : ${tKey.name}`);
+                    return (
+                      <Series valueField={tKey.name} name={key} key={index} />
+                    );
+                  }
+                });
+              })}
+              {/* <Series valueField="hydro" name="Hydro-electric" />
               <Series valueField="oil" name="Oil" />
               <Series valueField="gas" name="Natural gas" />
               <Series valueField="coal" name="Coal" />
-              <Series valueField="nuclear" name="Nuclear" />
+              <Series valueField="nuclear" name="Nuclear" /> */}
 
               <Legend
                 verticalAlignment="top"
