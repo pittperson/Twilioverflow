@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import axios from "axios";
-import {
-  Chart,
-  Series,
-  CommonSeriesSettings,
-  Legend,
-  Export,
-  Tooltip,
-  Title,
-} from "devextreme-react/chart";
+import { Bar } from 'react-chartjs-2';
+
+
+
+
 
 const Sankey = () => {
   // const [twilioTags, setTwilioTags] = useState({});
   const [twilioTags, setTwilioTags] = useState([]);
   const [keys, setKeys] = useState([]);
+  const [everything, setEverything] = useState({})
+
+  
 
   useEffect(() => {
     getTwilioTags("twilio").then((res1) => {
@@ -25,61 +24,77 @@ const Sankey = () => {
         }
 
         getRelatedTags(item1.name).then((res2) => {
-          let tempTagRelationJson = [];
+          console.log(`<<<< ${item1.name} >>>>`)
+          let tempDatasets = [];
+          let tempData = [];
+          let tempEverything = [];
+
           res2.data.items.forEach((item2, index2) => {
             if (item1.name !== item2.name) {
-              // tempTagRelationJson.push({
-              //   tagName: item1.name,
-              //   relatedName: item2.name,
-              //   [item2.name]: item2.count,
-
-              // });
-
-              tempTagRelationJson.push(
-                <Series
-                  valueField={item2.name}
-                  argumentField={item2.name}
-                  name={item1.name}
-                  type="bar"
-                  key={`${item1.name}${item2.name}`}
-                />
-              );
+              console.log(`${item2.name} : ${item2.count}`)
+              tempData.push(item2.count);
             }
           });
-          setTwilioTags((prevState) => [...prevState, ...tempTagRelationJson]);
+
+          res2.data.items.forEach((item2, index2) => {
+            if (item1.name !== item2.name) {
+              tempDatasets.push({label: item2.name, data: tempData});
+            }
+          });
+          setTwilioTags((prevState) => [...prevState, ...tempDatasets]);
+          // tempEverything.push({labels: tempKeys});
         });
       });
       setKeys(tempKeys);
     });
   }, []);
 
-  let poop = [];
-  poop = [
-    {
-      country: "USA",
-      hydro: 59.8,
-      oil: 937.6,
-      gas: 582,
-      coal: 564.3,
-      nuclear: 187.9,
-    },
-    {
-      country: "China",
-      hydro: 74.2,
-      oil: 308.6,
-      gas: 35.1,
-      coal: 956.9,
-      nuclear: 11.3,
-    },
-  ];
-  // console.log(poop);
-  console.log(twilioTags);
-  // console.log(keys);
+  console.log(keys);
+  console.log(twilioTags)
+  const all = ({labels: keys, datasets: twilioTags})
+  console.log(all)
+
+  const data = {
+    labels: ['1', '2', '3', '4', '5', '6'],
+    datasets: [
+      {
+        label: '# of Red Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        backgroundColor: 'rgb(255, 99, 132)',
+      },
+      {
+        label: '# of Blue Votes',
+        data: [2, 3, 20, 5, 1, 4],
+        backgroundColor: 'rgb(54, 162, 235)',
+      },
+      {
+        label: '# of Green Votes',
+        data: [3, 10, 13, 15, 22, 30],
+        backgroundColor: 'rgb(75, 192, 192)',
+      },
+    ],
+  };
+
+  console.log(data)
+
+  const options = {
+    scales: {
+      y: {
+        stacked: true,
+        ticks: {
+          beginAtZero: true
+        }
+      },
+      x: {
+        stacked: true
+      }
+    }
+  };
 
   async function getTwilioTags(tagName) {
     let queryUrl = "";
 
-    queryUrl = `https://api.stackexchange.com/2.3/tags?order=desc&sort=popular&inname=${tagName}&pagesize=1&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
+    queryUrl = `https://api.stackexchange.com/2.3/tags?order=desc&sort=popular&inname=${tagName}&pagesize=2&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
     return axios
       .get(queryUrl)
       .then((res) => {
@@ -93,7 +108,7 @@ const Sankey = () => {
   async function getRelatedTags(tagName) {
     let queryUrl = "";
 
-    queryUrl = `https://api.stackexchange.com/2.3/tags/${tagName}/related?pagesize=4&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
+    queryUrl = `https://api.stackexchange.com/2.3/tags/${tagName}/related?pagesize=3&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
     return axios
       .get(queryUrl)
       .then((res) => {
@@ -104,66 +119,13 @@ const Sankey = () => {
       });
   }
 
-  function customizeTooltip(arg) {
-    return {
-      text: `${arg.percentText} years: ${arg.valueText}`,
-    };
-  }
-
   return (
     <>
       <Container>
         <Row>
           <Col>
-            <Chart id="chart" dataSource={twilioTags}>
-              <Title
-                text="Energy Consumption in 2004"
-                subtitle="(Millions of Tons, Oil Equivalent)"
-              />
-              {/* <CommonSeriesSettings argumentField="tagName" type="stackedBar" /> */}
-
-              {/* {console.log(...twilioTags)}
-              {console.log(...poop)}
-
-              {keys.map((key, index) => {
-                let seriesList = [];
-                twilioTags.map((tKey, tIndex) => {
-                  // console.log(tKey.key);
-                  // console.log(`<<<<< ${key} >>>>>`);
-                  if (key === tKey.tagName) {
-                    // console.log(`Key: ${key}`);
-                    // console.log(`Key<>tagNameKey: ${key}<>${tKey.tagName}`);
-                    // console.log(`RelatedTag: ${twilioTags[0]}`);
-
-                    let listKey = key.concat(tKey.relatedName);
-                    seriesList.push(
-                      <Series
-                        valueField={twilioTags[index].relatedName}
-                        name={tKey.relatedName}
-                        key={listKey}
-                      />
-                    );
-                    console.log(seriesList);
-                    return [...seriesList];
-                  }
-                });
-              })} */}
-
-              {twilioTags}
-
-              {/* <Series valueField="twilio-api" name="TWILIO-API" />
-              <Series valueField="php" name="php" />
-              <Series valueField="node.js" name="node.js" />
-              <Series valueField="javascript" name="javascript" /> */}
-
-              <Legend
-                verticalAlignment="top"
-                horizontalAlignment="center"
-                itemTextPosition="right"
-              />
-              <Export enabled={true} />
-              <Tooltip enabled={true} customizeTooltip="" />
-            </Chart>
+          <Bar data={data} options={options} />
+          <Bar data={all} options={options} />
           </Col>
         </Row>
       </Container>
