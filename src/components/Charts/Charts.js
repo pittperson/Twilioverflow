@@ -3,7 +3,7 @@ import { Container, Col, Row } from "react-bootstrap";
 import axios from "axios";
 import { Bar } from "react-chartjs-2";
 
-const Sankey = () => {
+const Charts = () => {
   const [dataArray, setDataArray] = useState({
     labels: [],
     datasets: [],
@@ -41,7 +41,7 @@ const Sankey = () => {
             tempDatasets.push({
               label: item2.name,
               data: tempData,
-              backgroundColor: "rgb(54, 162, 235)",
+              backgroundColor: "rgb(254,171,5)",
             });
             tempData = [
               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -61,8 +61,16 @@ const Sankey = () => {
   }, []);
 
   const options = {
-    legend: {
-      display: false,
+    plugins: {
+      legend: {
+        position: "right",
+      },
+    },
+    elements: {
+      bar: {
+        borderWidth: 1,
+        borderColor: "#fff",
+      },
     },
     scales: {
       y: {
@@ -118,4 +126,4 @@ const Sankey = () => {
     </>
   );
 };
-export default Sankey;
+export default Charts;

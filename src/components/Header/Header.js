@@ -108,8 +108,8 @@ const Header = (props) => {
                 Contact
               </Nav.Link>
 
-              <Nav.Link className="d-none d-lg-block" href="/sankey">
-                Sankey Chart
+              <Nav.Link className="d-none d-lg-block" href="/charts">
+                Visulization
               </Nav.Link>
 
               <Nav.Link onClick={openSearch}>Search</Nav.Link>

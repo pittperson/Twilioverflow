@@ -46,7 +46,7 @@ const Hero = (props) => {
     if (window.location.pathname.length > 1) {
       tempDrillTags.push(
         <span key="drills" style={{ fontWeight: "bold", fontSize: "10pt" }}>
-          Drill Tags:{" "}
+          Drill Bits:{" "}
         </span>
       );
 

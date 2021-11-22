@@ -3,7 +3,7 @@ import "./App.scss";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import HomePage from "./components/HomePage/HomePage";
-import Sankey from "./components/Sankey/Sankey";
+import Charts from "./components/Charts/Charts";
 import React from "react";
 
 const App = () => {
@@ -12,7 +12,7 @@ const App = () => {
       <Header />
       <BrowserRouter>
         <Switch>
-          <Route path="/sankey" component={Sankey} />
+          <Route path="/charts" component={Charts} />
           <Route path="/:filter" component={HomePage} />
           <Route path="/" component={HomePage} />
         </Switch>
