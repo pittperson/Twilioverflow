@@ -31,7 +31,10 @@ const Sankey = () => {
         let tempEverything = [];
 
         relatedTagResponse.data.items.forEach((item2) => {
-          if (!tempRelatedTags.includes(item2.name)) {
+          if (
+            !tempRelatedTags.includes(item2.name) &&
+            category.name !== item2.name
+          ) {
             tempRelatedTags.push(item2.name);
             tempData[catIndex] = item2.count;
 
@@ -58,6 +61,9 @@ const Sankey = () => {
   }, []);
 
   const options = {
+    legend: {
+      display: false,
+    },
     scales: {
       y: {
         stacked: true,
@@ -74,7 +80,7 @@ const Sankey = () => {
   async function getTwilioTags(tagName) {
     let queryUrl = "";
 
-    queryUrl = `https://api.stackexchange.com/2.3/tags?order=desc&sort=popular&inname=${tagName}&pagesize=100&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
+    queryUrl = `https://api.stackexchange.com/2.3/tags?order=desc&sort=popular&inname=${tagName}&pagesize=5&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
     return axios
       .get(queryUrl)
       .then((res) => {
