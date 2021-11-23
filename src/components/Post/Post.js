@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import "./Post.scss";
 import Tag from "../Tags/Tag";
-import Emoji from "../Emoji/Emoji";
 
 const Post = (props) => {
   let x = 1;
