@@ -108,7 +108,7 @@ const Header = (props) => {
                 Contact
               </Nav.Link>
 
-              <Nav.Link className="d-none d-lg-block" href="/charts">
+              <Nav.Link className="d-none d-lg-block" href="/charts/twilio">
                 Visulization
               </Nav.Link>
 

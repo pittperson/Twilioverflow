@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Container, Col, Row } from "react-bootstrap";
+import { Container, Col, Row, Dropdown, Badge } from "react-bootstrap";
 import axios from "axios";
 import { Bar } from "react-chartjs-2";
-import { Dropdown } from "react-bootstrap";
+import "./Charts.scss";
 
 const getLastItem = (thePath) =>
   thePath.substring(thePath.lastIndexOf("/") + 1);
 
 const Charts = () => {
   const [categories, setCategories] = useState([]);
+  const [links, setLinks] = useState([]);
   const [dataArray, setDataArray] = useState({
     labels: [],
     datasets: [],
@@ -19,9 +20,7 @@ const Charts = () => {
       let tempKeys = [];
 
       for (let i = 0; i < res1.data.items.length; i++) {
-        let tempData = [];
         let category = res1.data.items[i];
-        let catIndex = i;
 
         if (tempKeys.indexOf(category.name) < 0) {
           tempKeys.push(category.name);
@@ -46,72 +45,86 @@ const Charts = () => {
       let tempData = [];
       let tempDatasets = [];
 
-      console.log("categoryName: ", categoryName);
       getRelatedTags(categoryName).then((relatedTags) => {
-        // console.log("related tags: ", relatedTags);
         for (
           let RtIndex = 0;
           RtIndex < relatedTags.data.items.length;
           RtIndex++
         ) {
-          if (!tempRelatedTags.includes(relatedTags.data.items[RtIndex].name)) {
+          if (
+            !tempRelatedTags.includes(relatedTags.data.items[RtIndex].name) &&
+            categoryName !== relatedTags.data.items[RtIndex].name
+          ) {
             tempRelatedTags.push(relatedTags.data.items[RtIndex].name);
             tempData.push(relatedTags.data.items[RtIndex].count);
           }
         }
 
-        console.log(tempData);
-
-        for (let x = 0; x < tempRelatedTags.length; x++) {
-          tempDatasets.push({
-            label: tempRelatedTags[x],
-            data: tempData[x],
-          });
-        }
-
-        // console.log(tempDatasets);
-
-        // dataset = [{
-        //   label:
-        //   data:
-        // }]
-        // tempDatasets.push({
-        //   // label: relatedTags.data.items[RtIndex].name,
-        //   data: tempData,
-        //   backgroundColor: "rgb(254,171,5)",
-        //   barPercentage: 0.5,
-        //   barThickness: 6,
-        //   maxBarThickness: 8,
-        //   minBarLength: 2,
-        // });
-
-        // console.log(tempRelatedTags);
-        // console.log(tempData);
+        tempDatasets.push({
+          data: tempData,
+          backgroundColor: [
+            "rgba(254,171,5, 1.0)",
+            "rgba(254,171,5, 0.9)",
+            "rgba(254,171,5, 0.8)",
+            "rgba(254,171,5, 0.7)",
+            "rgba(254,171,5, 0.6)",
+            "rgba(254,171,5, 0.5)",
+            "rgba(254,171,5, 0.4)",
+            "rgba(254,171,5, 0.3)",
+            "rgba(254,171,5, 0.2)",
+            "rgba(254,171,5, 0.1)",
+          ],
+          borderColor: [
+            "rgba(254,171,5)",
+            "rgba(254,171,5)",
+            "rgba(254,171,5)",
+            "rgba(254,171,5)",
+            "rgba(254,171,5)",
+            "rgba(254,171,5)",
+            "rgba(254,171,5)",
+            "rgba(254,171,5)",
+            "rgba(254,171,5)",
+            "rgba(254,171,5)",
+          ],
+          borderWidth: 1,
+        });
 
         setDataArray({
           labels: tempRelatedTags,
           datasets: tempDatasets,
         });
+
+        let tempLinks = [];
+        tempRelatedTags.forEach((tag) => {
+          tempLinks.push(
+            <Badge key={tag} style={{ backgroundColor: "#0274ba" }}>
+              {tag}
+            </Badge>
+          );
+        });
+        setLinks(tempLinks);
       });
     } else {
       console.log("choose a dropdown");
     }
   }, []);
 
-  console.log(dataArray);
+  console.log(links);
 
   const options = {
     plugins: {
       legend: {
         position: "top",
       },
-    },
-    elements: {
-      bar: {
-        barPercentage: 0.5,
-        barThickness: 6,
-        maxBarThickness: 8,
-        borderColor: "#fff",
+      title: {
+        display: true,
+        font: { size: "20pt" },
+        text: `Top 10 Related Tags for ${getLastItem(
+          window.location.pathname
+        )}`,
+      },
+      legend: {
+        display: false,
       },
     },
     scales: {
@@ -138,8 +151,6 @@ const Charts = () => {
     let queryUrl = "";
     queryUrl = `https://api.stackexchange.com/2.3/tags/${tagName}/related?pagesize=10&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
 
-    console.log("related tags query: ", queryUrl);
-
     return axios
       .get(queryUrl)
       .then((res) => {
@@ -157,7 +168,12 @@ const Charts = () => {
           <Col>
             <br />
             <Dropdown className="mb-4">
-              <Dropdown.Toggle size="sm" variant="success" id="dropdown-basic">
+              <Dropdown.Toggle
+                size="sm"
+                variant="success"
+                id="dropdown-basic"
+                style={{ backgroundColor: "#0274ba" }}
+              >
                 Twilio Categories
               </Dropdown.Toggle>
 
@@ -167,8 +183,11 @@ const Charts = () => {
         </Row>
 
         <Row>
-          <Col>
+          <Col xs={11}>
             <Bar data={dataArray} options={options} redraw />
+          </Col>
+          <Col xs={1} className="mt-5">
+            {links}
           </Col>
         </Row>
       </Container>
