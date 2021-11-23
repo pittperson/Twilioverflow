@@ -48,43 +48,45 @@ const Charts = () => {
 
       console.log("categoryName: ", categoryName);
       getRelatedTags(categoryName).then((relatedTags) => {
-        console.log("related tags: ", relatedTags);
+        // console.log("related tags: ", relatedTags);
         for (
           let RtIndex = 0;
           RtIndex < relatedTags.data.items.length;
           RtIndex++
         ) {
-          // console.log("tempRelatedTags: ", tempRelatedTags);
-          // console.log(
-          //   "relatedTags.data.items[RdIndex].name: ",
-          //   relatedTags.data.items[RtIndex].name
-          // );
-
           if (!tempRelatedTags.includes(relatedTags.data.items[RtIndex].name)) {
-            // console.log(
-            //   relatedTags.data.items[RtIndex].name,
-            //   " : ",
-            //   relatedTags.data.items[RtIndex].count
-            // );
-
             tempRelatedTags.push(relatedTags.data.items[RtIndex].name);
-            tempData[RtIndex] = relatedTags.data.items[RtIndex].count;
-            console.log(tempData);
-            tempDatasets.push({
-              label: relatedTags.data.items[RtIndex].name,
-              data: tempData,
-              backgroundColor: "rgb(254,171,5)",
-              // barPercentage: 0.5,
-              // barThickness: 6,
-              // maxBarThickness: 8,
-              // minBarLength: 2,
-            });
-            // tempData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            tempData.push(relatedTags.data.items[RtIndex].count);
           }
         }
 
-        console.log(tempRelatedTags);
-        console.log(tempDatasets);
+        console.log(tempData);
+
+        for (let x = 0; x < tempRelatedTags.length; x++) {
+          tempDatasets.push({
+            label: tempRelatedTags[x],
+            data: tempData[x],
+          });
+        }
+
+        // console.log(tempDatasets);
+
+        // dataset = [{
+        //   label:
+        //   data:
+        // }]
+        // tempDatasets.push({
+        //   // label: relatedTags.data.items[RtIndex].name,
+        //   data: tempData,
+        //   backgroundColor: "rgb(254,171,5)",
+        //   barPercentage: 0.5,
+        //   barThickness: 6,
+        //   maxBarThickness: 8,
+        //   minBarLength: 2,
+        // });
+
+        // console.log(tempRelatedTags);
+        // console.log(tempData);
 
         setDataArray({
           labels: tempRelatedTags,
