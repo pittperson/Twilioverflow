@@ -19,8 +19,6 @@ const Hero = (props) => {
   const [answerState, setAnswerState] = useState(cookies.get("answered"));
   const [drillTags, setDrillTags] = useState([]);
 
-  let history = useHistory();
-
   useEffect(() => {
     getTitles(nextPage, titleLimit, filters);
     getDrillTags();
@@ -48,7 +46,7 @@ const Hero = (props) => {
     if (window.location.pathname.length > 1) {
       tempDrillTags.push(
         <span key="drills" style={{ fontWeight: "bold", fontSize: "10pt" }}>
-          Drill Tags:{" "}
+          Drill Bits:{" "}
         </span>
       );
 
@@ -68,7 +66,7 @@ const Hero = (props) => {
     setDrillTags([...tempDrillTags]);
   };
 
-  console.log(drillTags);
+  // console.log(drillTags);
 
   const switchCase = () => {
     switch (answerState) {
