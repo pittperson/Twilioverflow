@@ -108,9 +108,8 @@ const Header = (props) => {
                 Contact
               </Nav.Link>
 
-              <Nav.Link className="d-none d-lg-block" href="/charts/twilio">
-                Visulization
-              </Nav.Link>
+              {/* <Nav.Link className="d-none d-lg-block" href="/charts/twilio"> */}
+              <Nav.Link href="/charts/twilio">Visulization</Nav.Link>
 
               <Nav.Link onClick={openSearch}>Search</Nav.Link>
             </Nav>
