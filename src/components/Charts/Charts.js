@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Col, Row, Dropdown, Badge } from "react-bootstrap";
 import axios from "axios";
 import { Bar } from "react-chartjs-2";
-import "./Charts.scss";
+import "./Charts.css";
 
 const getLastItem = (thePath) =>
   thePath.substring(thePath.lastIndexOf("/") + 1);
@@ -97,9 +97,23 @@ const Charts = () => {
         let tempLinks = [];
         tempRelatedTags.forEach((tag) => {
           tempLinks.push(
-            <Badge key={tag} style={{ backgroundColor: "#0274ba" }}>
-              {tag}
-            </Badge>
+            <span
+              className="rm -3"
+              key={tag}
+              style={{
+                backgroundColor: "#0274ba",
+                fontWeight: "bold",
+                fontSize: "9pt",
+                cursor: "pointer",
+                borderRadius: "4px",
+                padding: "4px",
+                marginRight: "2px",
+              }}
+            >
+              <a href={"/" + tag + ";"} style={{ color: "#fff" }}>
+                {tag}
+              </a>
+            </span>
           );
         });
         setLinks(tempLinks);
@@ -161,6 +175,10 @@ const Charts = () => {
       });
   }
 
+  const homeWithSearch = (tag) => {
+    window.location.href = `/${tag}`;
+  };
+
   return (
     <>
       <Container>
@@ -183,11 +201,14 @@ const Charts = () => {
         </Row>
 
         <Row>
-          <Col xs={11}>
+          <Col>
             <Bar data={dataArray} options={options} redraw />
           </Col>
-          <Col xs={1} className="mt-5">
+        </Row>
+        <Row>
+          <Col>
             {links}
+            <br />
           </Col>
         </Row>
       </Container>
