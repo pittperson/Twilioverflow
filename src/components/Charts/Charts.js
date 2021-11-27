@@ -106,6 +106,7 @@ const Charts = () => {
                 borderRadius: "4px",
                 padding: "4px",
                 marginRight: "2px",
+                marginBottom: "1rem",
               }}
             >
               <a href={"/" + tag + ";"} style={{ color: "#fff" }}>
@@ -184,12 +185,7 @@ const Charts = () => {
           <Col>
             <br />
             <Dropdown className="mb-4">
-              <Dropdown.Toggle
-                className="bg-darkcyan"
-                size="sm"
-                variant="success"
-                id="dropdown-basic"
-              >
+              <Dropdown.Toggle variant="darkcyan" size="sm" id="dropdown-basic">
                 Twilio Categories
               </Dropdown.Toggle>
 
@@ -197,7 +193,6 @@ const Charts = () => {
             </Dropdown>
           </Col>
         </Row>
-
         <Row>
           <Col>
             <Bar data={dataArray} options={options} redraw />
@@ -205,7 +200,9 @@ const Charts = () => {
         </Row>
         <Row>
           <Col>
-            <div style={{ marginBottom: "2rem" }}>{links}</div>
+            <div style={{ marginLeft: "3rem", marginBottom: "2rem" }}>
+              {links}
+            </div>
           </Col>
         </Row>
       </Container>

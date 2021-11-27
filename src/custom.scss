@@ -1,5 +1,4 @@
-// Override default variables before the import
-// you can open the bootstrap.scss module and check any available variables.
+// default bootstrap colors
 $blue: #0d6efd;
 // $indigo: #6610f2;
 // $purple: #6f42c1;
@@ -17,6 +16,9 @@ $gray-600: #6c757d;
 $gray-900: #212529;
 $black: #000;
 
+// custom colors to be mapped
+$darkcyan: #0374ba;
+
 $primary: $blue;
 $secondary: $gray-600;
 $success: $green;
@@ -25,9 +27,6 @@ $warning: $yellow;
 $danger: $red;
 $light: $gray-100;
 $dark: $gray-900;
-
-//custom color to be mapped
-$darkcyan: #0374ba;
 
 // this is used to map colors. change accordingly.
 $theme-colors: (
@@ -39,8 +38,11 @@ $theme-colors: (
   danger: $danger,
   light: $light,
   dark: $dark,
-  // Custom Colors
-  darkcyan: $darkcyan,
-  // now bg-accent,btn-accent,etc.. can be called
+  // custom Colors
+  darkcyan: $darkcyan // now bg-accent,btn-accent,etc.. can be called,,,,,,
 );
+
+$link-color: $black;
+$link-hover-color: $black;
+
 @import "~bootstrap/scss/bootstrap";
