@@ -1,5 +1,4 @@
 import { BrowserRouter, Switch, Route, useHistory } from "react-router-dom";
-import "./App.scss";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import HomePage from "./components/HomePage/HomePage";

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Container, Col, Row, Dropdown, Badge } from "react-bootstrap";
 import axios from "axios";
 import { Bar } from "react-chartjs-2";
-import "./Charts.css";
 
 const getLastItem = (thePath) =>
   thePath.substring(thePath.lastIndexOf("/") + 1);
@@ -97,11 +96,10 @@ const Charts = () => {
         let tempLinks = [];
         tempRelatedTags.forEach((tag) => {
           tempLinks.push(
-            <span
-              className="rm -3"
+            <Badge
+              className="rm-3 bg-darkcyan"
               key={tag}
               style={{
-                backgroundColor: "#0274ba",
                 fontWeight: "bold",
                 fontSize: "9pt",
                 cursor: "pointer",
@@ -113,7 +111,7 @@ const Charts = () => {
               <a href={"/" + tag + ";"} style={{ color: "#fff" }}>
                 {tag}
               </a>
-            </span>
+            </Badge>
           );
         });
         setLinks(tempLinks);
@@ -123,7 +121,7 @@ const Charts = () => {
     }
   }, []);
 
-  console.log(links);
+  console.log(dataArray);
 
   const options = {
     plugins: {
@@ -187,10 +185,10 @@ const Charts = () => {
             <br />
             <Dropdown className="mb-4">
               <Dropdown.Toggle
+                className="bg-darkcyan"
                 size="sm"
                 variant="success"
                 id="dropdown-basic"
-                style={{ backgroundColor: "#0274ba" }}
               >
                 Twilio Categories
               </Dropdown.Toggle>
@@ -207,8 +205,7 @@ const Charts = () => {
         </Row>
         <Row>
           <Col>
-            {links}
-            <br />
+            <div style={{ marginBottom: "2rem" }}>{links}</div>
           </Col>
         </Row>
       </Container>
