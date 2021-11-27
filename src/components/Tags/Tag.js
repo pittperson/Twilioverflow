@@ -9,7 +9,7 @@ const Tag = (props) => {
     checkForTagMatch();
   }, [match]);
 
-  // console.log(props.tag);
+  console.log(props.tag);
 
   let variant = "";
 
