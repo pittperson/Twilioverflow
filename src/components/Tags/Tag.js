@@ -27,6 +27,8 @@ const Tag = (props) => {
     }
   };
 
+  console.log("test");
+
   props.filters.match(regEx)
     ? (variant = "outline-danger")
     : (variant = "outline-secondary");
