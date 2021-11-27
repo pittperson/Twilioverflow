@@ -10,6 +10,9 @@ import {
   Dropdown,
   DropdownButton,
   Button,
+  Badge,
+  Row,
+  Col,
 } from "react-bootstrap";
 import { getTwilioTags } from "../../helpers/getTwilioTags";
 
@@ -86,6 +89,7 @@ const Header = (props) => {
         variant="dark"
         bg="danger"
         sticky="top"
+        className="py-3"
       >
         <Container>
           <Navbar.Brand href="/">
@@ -114,6 +118,18 @@ const Header = (props) => {
               <Nav.Link onClick={openSearch}>Search</Nav.Link>
             </Nav>
           </Navbar.Collapse>
+        </Container>
+      </Navbar>
+
+      <Navbar className="border-bottom bg-light py-2">
+        <Container>
+          <Row>
+            <Col>
+              <Badge className="bg-success">Accepted Answer</Badge>{" "}
+              <Badge className="bg-warning">Unaccepted Answer</Badge>{" "}
+              <Badge className="bg-danger">No Answer</Badge>{" "}
+            </Col>
+          </Row>
         </Container>
       </Navbar>
 

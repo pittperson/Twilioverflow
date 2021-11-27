@@ -160,18 +160,6 @@ const Hero = (props) => {
       <br />
       <Container>
         <Row>
-          <Col>
-            <h6>
-              <Badge className="mb-3 bg-success">Accepted Answer</Badge>{" "}
-              <Badge className="mb-3 bg-warning">Unaccepted Answer</Badge>{" "}
-              <Badge className="mb-3 bg-danger">No Answer</Badge>{" "}
-            </h6>
-          </Col>
-        </Row>
-        <Row>
-          <Col></Col>
-        </Row>
-        <Row>
           <Col xs={8}>{drillTags}</Col>
           {clearSearchLink}
         </Row>
