@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import "./index.scss";
 
 ReactDOM.render(
   <BrowserRouter>

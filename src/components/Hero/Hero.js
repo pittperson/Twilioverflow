@@ -1,9 +1,7 @@
 import Post from "../Post/Post";
 import React, { useState, useEffect } from "react";
-import { useHistory, Redirect } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { Container, Row, Col, Badge } from "react-bootstrap";
-import "./hero.css";
 
 const axios = require("axios");
 

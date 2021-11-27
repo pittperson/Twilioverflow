@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import "./Post.scss";
 import Tag from "../Tags/Tag";
+import "./Post.scss";
 
 const Post = (props) => {
   let x = 1;

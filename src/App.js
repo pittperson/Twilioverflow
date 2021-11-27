@@ -4,6 +4,7 @@ import Footer from "./components/Footer/Footer";
 import HomePage from "./components/HomePage/HomePage";
 import Charts from "./components/Charts/Charts";
 import React from "react";
+import "./index.scss";
 
 const App = () => {
   return (
