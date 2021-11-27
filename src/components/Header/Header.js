@@ -150,7 +150,7 @@ const Header = (props) => {
             />
 
             <DropdownButton
-              variant="outline-secondary"
+              variant="darkcyan"
               title="Search"
               id="input-group-dropdown-2"
               align="end"
@@ -184,8 +184,7 @@ const Header = (props) => {
 
           <div className="d-grid gap-2">
             <Button
-              className="mx-1 my-1"
-              variant="outline-primary"
+              className="mx-1 my-1 bg-darkcyan"
               size="sm"
               onClick={() => handleSearchByTags(searchTags)}
             >
