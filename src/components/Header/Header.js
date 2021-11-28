@@ -150,6 +150,10 @@ const Header = (props) => {
             <span style={{ fontWeight: "bold" }}>overflow</span>. Want to narrow
             things down? Just click on a tag below the title.
           </div>
+          <br />
+          <div>
+            This site is always changing. If it's broken, I'm making it better!
+          </div>
         </Modal.Body>
       </Modal>
 
