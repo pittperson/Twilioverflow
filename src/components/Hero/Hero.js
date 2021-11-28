@@ -64,6 +64,15 @@ const Hero = (props) => {
     setDrillTags([...tempDrillTags]);
   };
 
+  const unEscape = (htmlStr) => {
+    htmlStr = htmlStr.replace(/&lt;/g, "<");
+    htmlStr = htmlStr.replace(/&gt;/g, ">");
+    htmlStr = htmlStr.replace(/&quot;/g, '"');
+    htmlStr = htmlStr.replace(/&#39;/g, "'");
+    htmlStr = htmlStr.replace(/&amp;/g, "&");
+    return htmlStr;
+  };
+
   // console.log(drillTags);
 
   const switchCase = () => {
@@ -136,7 +145,7 @@ const Hero = (props) => {
           titles.push(
             <Post
               key={item.question_id}
-              title={item.title}
+              title={unEscape(item.title)}
               tags={item.tags}
               date={item.creation_date}
               link={item.link}
