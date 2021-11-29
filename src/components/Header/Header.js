@@ -113,7 +113,7 @@ const Header = (props) => {
               </Nav.Link>
 
               {/* <Nav.Link className="d-none d-lg-block" href="/charts/twilio"> */}
-              <Nav.Link href="/charts/twilio">Visulization</Nav.Link>
+              <Nav.Link href="/charts/twilio">visualize</Nav.Link>
 
               <Nav.Link onClick={openSearch}>Search</Nav.Link>
             </Nav>
