@@ -137,7 +137,6 @@ const Hero = (props) => {
     axios
       .get(queryUrl)
       .then((res) => {
-        console.log(queryUrl);
         const titles = [];
         const { items } = res.data;
 

@@ -9,7 +9,7 @@ const Tag = (props) => {
     checkForTagMatch();
   }, [match]);
 
-  console.log(props.tag);
+  // console.log(props.tag);
 
   let variant = "";
 
@@ -26,8 +26,6 @@ const Tag = (props) => {
       setMatch("no");
     }
   };
-
-  console.log("test");
 
   props.filters.match(regEx)
     ? (variant = "outline-danger")

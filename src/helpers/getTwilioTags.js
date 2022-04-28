@@ -13,3 +13,17 @@ export async function getTwilioTags(tagName) {
       console.log("error: ", e.message);
     });
 }
+
+export async function getTwilioRepos(userName) {
+  let queryUrl = "";
+
+  queryUrl = `https://api.github.com/users/${userName}/repos?per_page=100`;
+  return axios
+    .get(queryUrl)
+    .then((res) => {
+      return res;
+    })
+    .catch((e) => {
+      console.log("error: ", e.message);
+    });
+}

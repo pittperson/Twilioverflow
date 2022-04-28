@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Cookies from "universal-cookie";
 import {
   Container,
@@ -14,7 +13,7 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
-import { getTwilioTags } from "../../helpers/getTwilioTags";
+import { getTwilioRepos, getTwilioTags } from "../../helpers/getTwilioTags";
 
 import Navbar from "react-bootstrap/Navbar";
 import "./Header.scss";
@@ -22,6 +21,7 @@ import "./Header.scss";
 const Header = (props) => {
   const cookies = new Cookies();
   const [twilioTags, setTwilioTags] = useState([]);
+  const [twilioRepoList, setTwilioRepoList] = useState([]);
 
   useEffect(() => {
     // grab all tags with "twilio" in the name
@@ -34,11 +34,23 @@ const Header = (props) => {
 
       setTwilioTags(tempTwilioTags);
     });
+
+    let twilioRepos = [];
+    getTwilioRepos("twilio").then((res) => {
+      console.log(res.data.length);
+      for (let x = 0; x < res.data.length; x++) {
+        console.log(res.data[x].name);
+        twilioRepos.push(res.data[x].name);
+      }
+
+      setTwilioRepoList(twilioRepos);
+    });
   }, []);
 
   // modal constants
   const [about, setAbout] = useState(false);
   const [search, setSearch] = useState(false);
+  const [repolist, setRepoList] = useState(false);
 
   // search constants
   const [searchString, setSearchString] = useState("");
@@ -61,6 +73,8 @@ const Header = (props) => {
   const openAbout = () => setAbout(true);
   const closeSearch = () => setSearch(false);
   const openSearch = () => setSearch(true);
+  const openRepos = () => setRepoList(true);
+  const closeRepos = () => setRepoList(false);
 
   // handle text search submit
   const handleSearch = (event) => {
@@ -112,8 +126,9 @@ const Header = (props) => {
                 Contact
               </Nav.Link>
 
-              {/* <Nav.Link className="d-none d-lg-block" href="/charts/twilio"> */}
               <Nav.Link href="/charts/twilio">Visualize</Nav.Link>
+
+              <Nav.Link onClick={openRepos}>Repo List</Nav.Link>
 
               <Nav.Link onClick={openSearch}>Search</Nav.Link>
             </Nav>
@@ -154,6 +169,44 @@ const Header = (props) => {
           <div>
             This site is always changing. If it's broken, I'm making it better!
           </div>
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={repolist} onHide={closeRepos}>
+        <Modal.Header closeButton>
+          <Modal.Title>Twilio GitHub Repo List</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Modal.Body>
+            {twilioRepoList.map((tag, index) => {
+              return (
+                <Button
+                  className="mx-1 my-1"
+                  key={`${tag}`}
+                  variant={
+                    searchTags.includes(tag)
+                      ? "outline-danger"
+                      : "outline-secondary"
+                  }
+                  value={`${tag} - ${index}`}
+                  onClick={() => handleOnChange(tag, index)}
+                  size="sm"
+                >
+                  {tag}
+                </Button>
+              );
+            })}
+
+            <div className="d-grid gap-2">
+              <Button
+                className="mx-1 my-1 bg-darkcyan"
+                size="sm"
+                onClick={() => handleSearchByTags(searchTags)}
+              >
+                Search By Tags
+              </Button>
+            </div>
+          </Modal.Body>
         </Modal.Body>
       </Modal>
 
