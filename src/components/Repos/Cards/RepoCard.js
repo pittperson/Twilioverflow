@@ -7,7 +7,7 @@ const RepoCard = (props) => {
   return (
     <div className="repo-card">
       <div className="repo-name">
-        <a href={props.url}>{props.name}</a>
+        <a href={props.html_url}>{props.name}</a>
       </div>
     </div>
   );
