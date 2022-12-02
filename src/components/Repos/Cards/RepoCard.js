@@ -1,9 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { getTwilioRepoCommits } from "../../../helpers/getTwilioTags";
 import "./RepoCard.scss";
 
 const RepoCard = (props) => {
-  console.log(props);
+  // console.log(props);
+
+  getTwilioRepoCommits("twilio", props.name).then((res) => {
+    console.log(res.data);
+  });
+
   return (
     <div className="repo-card">
       <div className="repo-name">
