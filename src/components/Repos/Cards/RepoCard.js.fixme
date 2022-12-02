@@ -6,9 +6,9 @@ import "./RepoCard.scss";
 const RepoCard = (props) => {
   // console.log(props);
 
-  getTwilioRepoCommits("twilio", props.name).then((res) => {
-    console.log(res.data);
-  });
+  // getTwilioRepoCommits("twilio", props.name).then((res) => {
+  //   console.log(res.data);
+  // });
 
   return (
     <div className="repo-card">
