@@ -113,7 +113,7 @@ const Header = (props) => {
 
               <Nav.Link href="/charts/twilio">Visualize</Nav.Link>
 
-              <Nav.Link href="/repos">GitHub Repo List</Nav.Link>
+              {/* <Nav.Link href="/repos">GitHub Repo List</Nav.Link> */}
 
               <Nav.Link onClick={openSearch}>Search</Nav.Link>
             </Nav>
