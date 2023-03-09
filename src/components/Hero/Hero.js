@@ -128,10 +128,11 @@ const Hero = (props) => {
       queryUrl = `https://api.stackexchange.com/2.3/search/advanced?tagged=[${filters}]&page=${pageNum}&pagesize=${pageSize}&title=${searchFor}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((${queryTack}`;
       console.log(queryUrl);
     } else if (queryList) {
-      console.log(queryList);
+      console.log(queryUrl);
       queryUrl = `https://api.stackexchange.com/2.3/questions?tagged=[${queryList}]&page=${pageNum}&pagesize=${pageSize}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
     } else {
       queryUrl = `https://api.stackexchange.com/2.3/questions?tagged=[${filters}]&page=${pageNum}&pagesize=${pageSize}&site=stackoverflow&key=DkLwlYTWw9AoNuzTYgmnUg((`;
+      console.log(queryUrl);
     }
 
     axios
